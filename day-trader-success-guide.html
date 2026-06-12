@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day Trader Success — Réplicas Exatas das Imagens</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10; --bg2: #101318; --bg3: #151a22; --card: #181e28;
+    --border: #242b38; --text: #e2e6ed; --text2: #8891a4; --text3: #586170;
+    --green: #22c55e; --green-bg: rgba(34,197,94,.12); --green-glow: rgba(34,197,94,.35);
+    --red: #ef4444; --red-bg: rgba(239,68,68,.12);
+    --yellow: #eab308; --blue: #3b82f6; --cyan: #06b6d4; --purple: #a855f7; --orange: #f97316; --gold: #f59e0b;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+
+  /* HEADER */
+  .hero{background:linear-gradient(135deg,#0a0c10,#0f172a,#0a0c10);border-bottom:1px solid var(--border);padding:60px 24px 48px;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(34,197,94,.07) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(59,130,246,.04) 0%,transparent 60%);pointer-events:none}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;background:var(--green-bg);border:1px solid rgba(34,197,94,.25);border-radius:100px;font-size:11px;font-weight:600;color:var(--green);letter-spacing:.5px;text-transform:uppercase;margin-bottom:20px}
+  .hero h1{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:900;letter-spacing:-1px;background:linear-gradient(135deg,#fff 0%,#22c55e 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+  .hero p{font-size:clamp(.9rem,1.8vw,1.1rem);color:var(--text2);max-width:600px;margin:0 auto 24px}
+  .hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+  .stat-item{text-align:center}
+  .stat-item .num{font-size:24px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace}
+  .stat-item .label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+  .stat-item .num.gold{color:var(--gold)}
+
+  /* NAV */
+  .nav-tabs{position:sticky;top:0;z-index:100;background:rgba(10,12,16,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;gap:0;overflow-x:auto;padding:0 12px;scrollbar-width:none}
+  .nav-tabs::-webkit-scrollbar{display:none}
+  .nav-tab{flex-shrink:0;padding:12px 16px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;text-decoration:none;white-space:nowrap}
+  .nav-tab:hover{color:var(--text);background:var(--bg2)}
+  .nav-tab.active{color:var(--green);border-bottom-color:var(--green)}
+  .container{max-width:1100px;margin:0 auto;padding:0 16px}
+
+  /* SECTION */
+  .section{padding:48px 0;border-bottom:1px solid var(--border)}
+  .section:last-of-type{border-bottom:none}
+
+  .num-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-bg);border:1px solid rgba(34,197,94,.2);border-radius:100px;padding:4px 14px 4px 8px;margin-bottom:14px}
+  .num-badge .n{width:24px;height:24px;border-radius:8px;background:var(--green);color:#000;font-weight:800;font-size:12px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center}
+  .num-badge span{font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.5px}
+
+  .header-row{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+  .title-area{flex:1;min-width:200px}
+  .title-area h2{font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:800;letter-spacing:-.3px;margin-bottom:6px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .tag{padding:2px 10px;border-radius:5px;font-size:10px;font-weight:600;font-family:'JetBrains Mono',monospace}
+  .tag.otc{background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.2);color:var(--cyan)}
+  .tag.m1{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.15);color:var(--gold)}
+  .tag.expiry{padding:2px 10px;border-radius:5px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace}
+  .tag.expiry5{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);color:var(--purple)}
+  .tag.expiry10{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--blue)}
+  .tag.expiry30{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:var(--orange)}
+  .tag.payout{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);color:var(--green)}
+  .tag.type{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.2);color:var(--purple)}
+  .tag.pattern{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:var(--blue)}
+
+  .result-box{display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--green-bg);border:1px solid rgba(34,197,94,.2);border-radius:10px;white-space:nowrap}
+  .result-box .amount{font-size:18px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace}
+  .result-box .sub{font-size:10px;color:var(--text2);font-weight:500}
+
+  /* CHART */
+  .chart-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px 12px;margin-bottom:16px;position:relative;overflow:hidden}
+  .chart-box .clabel{position:absolute;top:8px;left:16px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;font-weight:500;z-index:2}
+  .chart-box .watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:60px;font-weight:900;color:rgba(255,255,255,.018);letter-spacing:3px;pointer-events:none;white-space:nowrap;z-index:0;font-family:'JetBrains Mono',monospace}
+  .chart{position:relative;width:100%;height:240px;z-index:1}
+  .grid{position:absolute;inset:0;pointer-events:none}
+  .grid .hl{position:absolute;left:0;right:40px;height:1px;background:rgba(255,255,255,.035)}
+  .grid .vl{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.025)}
+  .plabels{position:absolute;right:0;top:0;bottom:0;width:40px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}
+  .plabels span{font-size:8px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-align:right;line-height:1}
+  .plabels span:nth-child(even){opacity:.35}
+  .ctime{display:flex;justify-content:space-between;padding:0 40px 0 0;margin-top:-2px}
+  .ctime span{font-size:8px;color:var(--text3);font-family:'JetBrains Mono',monospace;opacity:.45}
+
+  /* CANDLES */
+  .cw{position:absolute;bottom:0;display:flex;align-items:center;justify-content:center;z-index:2}
+  .cc{position:relative;width:100%;display:flex;flex-direction:column;align-items:center}
+  .cc .wk{width:2px;flex-shrink:0;border-radius:1px}
+  .cc .bd{width:100%;border-radius:2px;flex-shrink:0;position:relative}
+  .cc .bd::after{content:'';position:absolute;inset:0;border-radius:2px;background:linear-gradient(to bottom,rgba(255,255,255,.06),transparent);pointer-events:none}
+  .cc.bull .wk{background:var(--green)}
+  .cc.bull .bd{background:var(--green);box-shadow:0 0 5px var(--green-glow)}
+  .cc.bear .wk{background:var(--red)}
+  .cc.bear .bd{background:var(--red);box-shadow:0 0 3px rgba(239,68,68,.25)}
+
+  /* MARKERS */
+  .eline{position:absolute;left:0;right:40px;border-top:2px dashed var(--green);z-index:3;opacity:.85}
+  .eline .el{position:absolute;right:-4px;top:-13px;font-size:8px;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace;background:var(--bg2);padding:1px 5px;border-radius:3px;border:1px solid rgba(34,197,94,.3);white-space:nowrap}
+  .sline{position:absolute;left:0;right:40px;border-top:2px dashed var(--blue);z-index:3;opacity:.55}
+  .sline .sl{position:absolute;left:0;top:-13px;font-size:8px;font-weight:600;color:var(--blue);font-family:'JetBrains Mono',monospace;padding:1px 5px;border-radius:3px;white-space:nowrap;background:rgba(59,130,246,.1)}
+  .rline{position:absolute;left:0;right:40px;border-top:2px dashed var(--orange);z-index:3;opacity:.55}
+  .rline .rl{position:absolute;right:0;top:-13px;font-size:8px;font-weight:600;color:var(--orange);font-family:'JetBrains Mono',monospace;padding:1px 5px;border-radius:3px;white-space:nowrap;background:rgba(249,115,22,.1)}
+  .annot{position:absolute;z-index:6;padding:3px 8px;border-radius:5px;font-size:9px;font-weight:600;font-family:'JetBrains Mono',monospace;pointer-events:none;white-space:nowrap;line-height:1.3}
+  .annot.g{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+  .annot.r{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:var(--red)}
+  .annot.b{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--blue)}
+  .annot.y{background:rgba(234,179,8,.15);border:1px solid rgba(234,179,8,.3);color:var(--gold)}
+  .annot.c{background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.3);color:var(--cyan)}
+  .annot.p{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);color:var(--purple)}
+  .arrow-up,.arrow-down{position:absolute;z-index:5;font-size:20px;font-weight:900;pointer-events:none;line-height:1}
+  .arrow-up{color:var(--green)}
+  .arrow-down{color:var(--red)}
+
+  /* EXPIRY INDICATOR */
+  .expiry-indicator{position:absolute;z-index:7;padding:5px 12px;border-radius:8px;font-weight:700;font-family:'JetBrains Mono',monospace;pointer-events:none;white-space:nowrap;display:flex;align-items:center;gap:6px;font-size:11px;letter-spacing:.3px}
+  .expiry-indicator .icon{display:inline-block;width:8px;height:8px;border-radius:50%;animation:pulse-dot 1.5s ease-in-out infinite}
+  .expiry5{border:1px solid var(--purple);background:rgba(168,85,247,.12);color:var(--purple)}
+  .expiry5 .icon{background:var(--purple)}
+  .expiry10{border:1px solid var(--blue);background:rgba(59,130,246,.12);color:var(--blue)}
+  .expiry10 .icon{background:var(--blue)}
+  .expiry30{border:1px solid var(--orange);background:rgba(249,115,22,.12);color:var(--orange)}
+  .expiry30 .icon{background:var(--orange)}
+  @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+
+  /* ENTRY ARROW */
+  .entry-arrow{position:absolute;z-index:5;font-size:28px;pointer-events:none;transform:translate(-50%,0)}
+  .entry-arrow.g{color:var(--green);text-shadow:0 0 12px var(--green-glow)}
+  .entry-arrow.r{color:var(--red);text-shadow:0 0 12px rgba(239,68,68,.3)}
+
+  /* GRID INFO */
+  .grid-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+  .gi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px}
+  .gi .key{font-size:9px;text-transform:uppercase;letter-spacing:.4px;color:var(--text3);font-weight:600;margin-bottom:3px}
+  .gi .val{font-size:13px;font-weight:600;color:var(--text);font-family:'JetBrains Mono',monospace}
+  .gi .val.g{color:var(--green)}.gi .val.b{color:var(--blue)}.gi .val.gold{color:var(--gold)}.gi .val.c{color:var(--cyan)}.gi .val.p{color:var(--purple)}.gi .val.o{color:var(--orange)}
+
+  /* ANALYSIS */
+  .abox{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 20px}
+  .abox h4{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);margin-bottom:10px}
+  .abox ul{list-style:none}
+  .abox li{position:relative;padding-left:18px;margin-bottom:6px;font-size:13px;color:var(--text);line-height:1.5}
+  .abox li:last-child{margin-bottom:0}
+  .abox li::before{content:'';position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;background:var(--green)}
+  .abox li.r::before{background:var(--red)}
+  .abox li.b::before{background:var(--blue)}
+  .abox li.gold::before{background:var(--gold)}
+  .abox li.c::before{background:var(--cyan)}
+  .abox li.p::before{background:var(--purple)}
+
+  /* CHEAT SHEET */
+  .cheatsheet{padding:48px 0}
+  .cheatsheet h2{font-size:clamp(1.2rem,2.5vw,1.6rem);font-weight:800;margin-bottom:24px;text-align:center}
+  .cheatsheet h2 span{color:var(--green)}
+  .cs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:24px}
+  .cs-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;transition:all .2s}
+  .cs-card:hover{border-color:var(--green)}
+  .cs-card h3{font-size:13px;font-weight:700;color:var(--green);margin-bottom:10px;text-transform:uppercase;letter-spacing:.3px}
+  .cs-card ul{list-style:none}
+  .cs-card li{font-size:12px;color:var(--text2);padding:3px 0 3px 14px;position:relative}
+  .cs-card li::before{content:'→';position:absolute;left:0;color:var(--green);font-weight:700}
+  .cs-card.bad{border-color:rgba(239,68,68,.2)}
+  .cs-card.bad:hover{border-color:var(--red)}
+  .cs-card.bad h3{color:var(--red)}
+  .cs-card.bad li::before{color:var(--red)}
+
+  .protips{background:linear-gradient(135deg,var(--bg2),#0d1a12);border:1px solid rgba(34,197,94,.12);border-radius:14px;padding:24px 28px}
+  .protips h3{font-size:15px;font-weight:700;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .protips ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+  .protips li{font-size:12px;color:var(--text2);padding-left:18px;position:relative}
+  .protips li::before{content:'⚡';position:absolute;left:0}
+
+  .vis-ref{display:inline-flex;align-items:center;gap:6px;background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.15);border-radius:6px;padding:3px 10px;font-size:10px;font-weight:500;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-top:4px}
+
+  .footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);color:var(--text3);font-size:12px}
+  .footer strong{color:var(--green)}
+
+  @media(max-width:640px){
+    .hero{padding:40px 16px 32px}
+    .hero-stats{gap:16px}
+    .stat-item .num{font-size:20px}
+    .header-row{flex-direction:column}
+    .result-box{align-self:flex-start}
+    .chart{height:200px}
+    .chart-box{padding:14px 10px 10px}
+    .grid-info{grid-template-columns:1fr 1fr}
+    .nav-tab{padding:10px 12px;font-size:10px}
+    .expiry-indicator{font-size:9px;padding:3px 8px}
+    .annot{font-size:7px;padding:1px 5px}
+    .abox{padding:12px 14px}
+    .abox li{font-size:12px}
+    .protips ul{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-badge">📸 Réplicas Exatas dos Prints</div>
+  <h1>Day Trader Success</h1>
+  <p>Cada gráfico abaixo é uma <strong>réplica CSS fiel</strong> dos prints reais da plataforma Quotex. Mesmas velas, mesmos preços, mesmos horários — com marcações de entrada e expiry.</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="num">8</div><div class="label">Trades Reais</div></div>
+    <div class="stat-item"><div class="num gold">5s</div><div class="label">Expiry Padrão</div></div>
+    <div class="stat-item"><div class="num">M1</div><div class="label">Timeframe</div></div>
+    <div class="stat-item"><div class="num">93%</div><div class="label">Payout Médio</div></div>
+  </div>
+</header>
+
+<nav class="nav-tabs" id="nav">
+  <a href="#t1" class="nav-tab active">GBP/JPY</a>
+  <a href="#t2" class="nav-tab">CAD/CHF</a>
+  <a href="#t3" class="nav-tab">EUR/CAD</a>
+  <a href="#t4" class="nav-tab">USD/BRL</a>
+  <a href="#t5" class="nav-tab">EUR/USD</a>
+  <a href="#t6" class="nav-tab">USD/ARS</a>
+  <a href="#t7" class="nav-tab">AUD/CAD</a>
+  <a href="#t8" class="nav-tab">GBP/NZD</a>
+  <a href="#cs" class="nav-tab">📋 Cheat</a>
+</nav>
+
+<div class="container">
+
+<!-- ===== TRADE 1: GBP/JPY OTC ===== -->
+<section class="section" id="t1">
+  <div class="num-badge"><span class="n">1</span><span>GBP/JPY OTC — O Clássico</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>3 Velas Vermelhas + Martelo no Suporte 215.100</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span>
+        <span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">93% Payout</span>
+        <span class="tag type">CALL</span>
+        <span class="tag pattern">🔁 Reversão</span>
+      </div>
+      <div class="vis-ref">📷 image 6.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+R$ 28,95</div><div class="sub">Lucro • 23:41:40 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">GBP/JPY OTC · M1</div>
+    <div class="watermark">GBPJPY</div>
+
+    <!-- EXPIRY INDICATOR -->
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;">
+      <span class="icon"></span> EXPIRY 5s
+    </div>
+
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div>
+        <div class="hl" style="top:20%"></div>
+        <div class="hl" style="top:40%"></div>
+        <div class="hl" style="top:60%"></div>
+        <div class="hl" style="top:80%"></div>
+        <div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div>
+        <div class="vl" style="left:25%"></div>
+        <div class="vl" style="left:37.5%"></div>
+        <div class="vl" style="left:50%"></div>
+        <div class="vl" style="left:62.5%"></div>
+        <div class="vl" style="left:75%"></div>
+        <div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>215.500</span><span>215.400</span><span>215.300</span><span>215.200</span><span>215.100</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 215.100</span></div>
+      <div class="eline" style="bottom:16%"><span class="el">ENTRADA 215.115</span></div>
+
+      <!-- Candle 1: bear 215.420→215.340 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:14%;height:56%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:48%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- Candle 2: bear 215.340→215.270 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:10%;height:48%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:40%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- Candle 3: bear 215.270→215.210 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:8%;height:40%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:34%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- Candle 4: bear 215.210→215.150 (testou suporte) -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:6%;height:36%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- Candle 5: MARTELO! 215.120→215.145 -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:8%;height:30%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:16%"></div><div class="wk" style="height:20%"></div></div></div>
+      <!-- Candle 6: bull 215.145→215.180 -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:10%;height:28%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- Candle 7: bull 215.180→215.220 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:12%;height:30%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:26%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- Candle 8: ENTRADA! bull 215.220→215.280 -->
+      <div class="cw" style="left:48%;width:6%;bottom:14%;height:38%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:34%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- Candle 9: bull 215.280→215.350 -->
+      <div class="cw" style="left:55%;width:5.5%;bottom:18%;height:44%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:40%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- Candle 10: bull 215.350→215.400 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:22%;height:46%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:40%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- Candle 11: bear 215.400→215.380 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:24%;height:36%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- Candle 12: bull 215.380→215.395 -->
+      <div class="cw" style="left:74.5%;width:5.5%;bottom:24%;height:32%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <!-- ANNOTATIONS -->
+      <div class="annot g" style="bottom:52%;left:27%;transform:translateX(-50%)">🔨 Martelo!</div>
+      <div class="annot r" style="bottom:62%;left:12%;transform:translateX(-50%)">3 velas vermelhas 🔴🔴🔴</div>
+      <div class="annot b" style="bottom:6%;left:23%;transform:translateX(-50%)">Teste de suporte</div>
+      <div class="entry-arrow g" style="bottom:38%;left:51%">▲</div>
+      <div class="annot g" style="bottom:60%;left:51%;transform:translateX(-50%)">✅ CALL</div>
+    </div>
+
+    <div class="ctime">
+      <span>23:20</span><span>23:28</span><span>23:36</span><span>23:44</span><span>23:52</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">215.115</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">215.159</div></div>
+    <div class="gi"><div class="key">Velas Vermelhas</div><div class="val">3 + 1 (teste)</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">🔨 Martelo</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">215.100</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu (número por número)</h4>
+    <ul>
+      <li><strong>23:20-23:36</strong> — 3 velas vermelhas consecutivas derrubando o preço de 215.420 → 215.150</li>
+      <li><strong>23:37</strong> — 4ª vela vermelha TESTA o suporte 215.100 com pavio longo, mas corpo fecha pequeno</li>
+      <li class="c"><strong>23:38</strong> — 🔨 MARTELO: pavio inferior enorme (2× o corpo), fechamento verde. REJEIÇÃO CONFIRMADA</li>
+      <li><strong>23:39</strong> — Vela verde de confirmação sobe para 215.180</li>
+      <li class="p"><strong>23:40 — ENTRADA: 215.115</strong> — CALL com <strong>expiry de 5 SEGUNDOS</strong></li>
+      <li class="g"><strong>Resultado:</strong> Preço disparou para 215.159 em segundos — lucro de <strong>R$ 28,95</strong></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 2: CAD/CHF OTC ===== -->
+<section class="section" id="t2">
+  <div class="num-badge"><span class="n">2</span><span>CAD/CHF OTC — Fundo Triplo</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>Fundo Triplo no Suporte 0.55750 — Entrada Carrinho</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry10">⏱ 10s</span>
+        <span class="tag payout">93% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">📊 Fundo Triplo</span>
+      </div>
+      <div class="vis-ref">📷 image 10.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+R$ 96,50</div><div class="sub">Lucro • 21:21:45 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">CAD/CHF OTC · M1</div>
+    <div class="watermark">CADCHF</div>
+    <div class="expiry-indicator expiry10" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 10s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:25%"></div><div class="hl" style="top:50%"></div><div class="hl" style="top:75%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>0.55950</span><span>0.55850</span><span>0.55750</span><span>0.55650</span><span>0.55550</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 0.55750</span></div>
+      <div class="eline" style="bottom:18%"><span class="el">ENTRADA 0.55748</span></div>
+
+      <!-- C1: bear 0.56000→0.55820 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:12%;height:52%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:38%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C2: bull 0.55820→0.55880 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:14%;height:36%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C3: bear 0.55880→0.55720 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:6%;height:44%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:34%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C4: bull 0.55720→0.55780 -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:10%;height:28%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:6%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C5: bear 0.55780→0.55700 (teste 2) -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:4%;height:36%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:10%"></div></div></div>
+      <!-- C6: bull 0.55700→0.55730 (martelo) -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:6%;height:26%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:16%"></div></div></div>
+      <!-- C7: bear 0.55730→0.55710 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:4%;height:26%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:10%"></div></div></div>
+      <!-- C8: MARTELO FUNDO TRIPLO 0.55710→0.55735 -->
+      <div class="cw" style="left:47.5%;width:5.5%;bottom:6%;height:24%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:10%"></div><div class="wk" style="height:16%"></div></div></div>
+      <!-- C9: ENTRADA! bull forte 0.55735→0.55772 -->
+      <div class="cw" style="left:54%;width:6%;bottom:14%;height:28%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:26%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C10: bull 0.55772→0.55850 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:20%;height:32%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:30%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 0.55850→0.55830 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:20%;height:22%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C12: bull 0.55830→0.55845 -->
+      <div class="cw" style="left:74.5%;width:5.5%;bottom:20%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annot c" style="bottom:2%;left:23%;transform:translateX(-50%)">Fundo 1</div>
+      <div class="annot c" style="bottom:2%;left:35%;transform:translateX(-50%)">Fundo 2</div>
+      <div class="annot c" style="bottom:2%;left:48%;transform:translateX(-50%)">Fundo 3 🎯</div>
+      <div class="annot g" style="bottom:32%;left:57%;transform:translateX(-50%)">✅ CALL</div>
+      <div class="annotation p" style="bottom:20%;left:68%;transform:translateX(-50%);font-size:8px">🚀 Disparada!</div>
+      <div class="entry-arrow g" style="bottom:22%;left:57%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>21:04</span><span>21:12</span><span>21:20</span><span>21:28</span><span>21:36</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">0.55748</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">0.55772</div></div>
+    <div class="gi"><div class="key">Fundo Testado</div><div class="val b">3×</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">🔨 Martelo ×3</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">0.55750</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val b">10 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>21:04-21:12</strong> — Preço cai de 0.56000 para 0.55720 (1º fundo)</li>
+      <li><strong>21:13-21:17</strong> — Testa suporte 0.55750 novamente (2º fundo) com martelo</li>
+      <li class="c"><strong>21:18-21:19</strong> — 3º toque no suporte com martelo PERFEITO: pavio 2× corpo</li>
+      <li class="p"><strong>DIFERENÇA CRÍTICA:</strong> expiry de <strong>10 SEGUNDOS</strong> (não 5s!) — mais tempo para o movimento se consolidar</li>
+      <li class="g"><strong>Entrada 0.55748</strong> — CALL imediatamente após o 3º martelo</li>
+      <li class="g"><strong>Lucro: R$ 96,50</strong> — a maior operação em reais!</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 3: EUR/CAD OTC ===== -->
+<section class="section" id="t3">
+  <div class="num-badge"><span class="n">3</span><span>EUR/CAD OTC — Queda de 5 Velas</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>5 Velas Vermelhas + Reversão no Suporte 1.61300</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">92% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">🔁 Reversão 5 velas</span>
+      </div>
+      <div class="vis-ref">📷 image 15.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+€11,52</div><div class="sub">Lucro • 12:30 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">EUR/CAD OTC · M1</div>
+    <div class="watermark">EURCAD</div>
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 5s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:20%"></div><div class="hl" style="top:40%"></div><div class="hl" style="top:60%"></div><div class="hl" style="top:80%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>1.61500</span><span>1.61400</span><span>1.61300</span><span>1.61200</span><span>1.61100</span>
+      </div>
+      <div class="sline" style="bottom:12%"><span class="sl">Suporte 1.61300</span></div>
+      <div class="eline" style="bottom:18%"><span class="el">ENTRADA 1.61335</span></div>
+
+      <!-- C1: bull 1.61300→1.61360 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:18%;height:24%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C2: bull 1.61360→1.61440 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:26%;height:30%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:30%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C3: doji 1.61440→1.61435 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:30%;height:16%"><div class="cc bear" style="height:100%"><div class="wk" style="height:6%"></div><div class="bd" style="height:4%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C4: bear 1.61435→1.61370 -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:22%;height:28%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C5: bear 1.61370→1.61310 -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:14%;height:32%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:28%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C6: bear 1.61310→1.61270 (teste suporte!) -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:8%;height:32%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C7: martelo! 1.61270→1.61300 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:10%;height:26%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:16%"></div></div></div>
+      <!-- C8: ENTRADA! bull 1.61300→1.61335 -->
+      <div class="cw" style="left:48%;width:6%;bottom:18%;height:22%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C9: bull 1.61335→1.61365 -->
+      <div class="cw" style="left:55%;width:5.5%;bottom:20%;height:20%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C10: bull 1.61365→1.61400 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:24%;height:24%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 1.61400→1.61380 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:24%;height:18%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annotation p" style="bottom:58%;left:28%;font-size:7px">❌ 5 VELAS VERMELHAS 🔴🔴🔴🔴🔴</div>
+      <div class="annot c" style="bottom:4%;left:39%;transform:translateX(-50%)">🔨 Martelo!</div>
+      <div class="annot g" style="bottom:36%;left:51%;transform:translateX(-50%)">✅ CALL</div>
+      <div class="entry-arrow g" style="bottom:26%;left:51%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>12:16</span><span>12:24</span><span>12:32</span><span>12:40</span><span>12:48</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">1.61335</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">1.61331</div></div>
+    <div class="gi"><div class="key">Velas Vermelhas</div><div class="val r">5 CONSECUTIVAS</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">🔨 Martelo</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">1.61300</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>5 velas vermelhas consecutivas</strong> — a maior sequência de queda entre todos os trades</li>
+      <li>A quinta vela <strong>testou o suporte 1.61300</strong> com pavio enorme — rejeição fortíssima</li>
+      <li class="c">Martelo clássico: corpo verde pequeno + pavio inferior 2× — sinal inequívoco de reversão</li>
+      <li class="p"><strong>Entrada 1.61335</strong> — CALL com <strong>5s de expiry</strong></li>
+      <li class="g"><strong>Lucro: €11,52</strong> — o preço subiu para 1.61331+ nos segundos seguintes</li>
+      <li class="b"><strong>Regra:</strong> Quanto mais velas vermelhas, mais forte a reversão. 5 velas = máxima confiança.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 4: USD/BRL OTC ===== -->
+<section class="section" id="t4">
+  <div class="num-badge"><span class="n">4</span><span>USD/BRL OTC — Seu Par Favorito</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>USD/BRL: Reversão no 0.19120 — Abertura NY</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">93% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">📊 Suporte Psicológico</span>
+      </div>
+      <div class="vis-ref">📷 image 20.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+€17,37</div><div class="sub">Lucro • ~12:44 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">USD/BRL OTC · M1</div>
+    <div class="watermark">USDBRL</div>
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 5s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:20%"></div><div class="hl" style="top:40%"></div><div class="hl" style="top:60%"></div><div class="hl" style="top:80%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>0.19200</span><span>0.19180</span><span>0.19160</span><span>0.19140</span><span>0.19120</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 0.19120</span></div>
+      <div class="eline" style="bottom:28%"><span class="el">ENTRADA 0.19142</span></div>
+
+      <!-- C1: bull 0.19140→0.19160 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:28%;height:14%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C2: bear 0.19160→0.19135 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:22%;height:18%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:16%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C3: bear 0.19135→0.19122 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:16%;height:20%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C4: bear testa suporte! 0.19122→0.19118 -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:10%;height:24%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C5: MARTELO! 0.19118→0.19128 -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:14%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:10%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C6: bull 0.19128→0.19138 -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:20%;height:14%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C7: bear 0.19138→0.19128 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:14%;height:18%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C8: ENTRADA! bull 0.19128→0.19144 -->
+      <div class="cw" style="left:48%;width:6%;bottom:22%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C9: bull 0.19144→0.19160 -->
+      <div class="cw" style="left:55%;width:5.5%;bottom:28%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C10: bull 0.19160→0.19175 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:34%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 0.19175→0.19170 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:34%;height:12%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:8%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annot c" style="bottom:6%;left:26%;transform:translateX(-50%)">🔨 Martelo + Suporte</div>
+      <div class="annot g" style="bottom:38%;left:51%;transform:translateX(-50%)">✅ CALL</div>
+      <div class="annot gold" style="bottom:42%;left:62%;transform:translateX(-50%);font-size:7px">XX150 → XX175</div>
+      <div class="entry-arrow g" style="bottom:28%;left:51%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>12:16</span><span>12:24</span><span>12:32</span><span>12:40</span><span>12:48</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">0.19142</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">0.19144+</div></div>
+    <div class="gi"><div class="key">Horário BR</div><div class="val b">10:34 (~NY Open)</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">🔨 Martelo</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">0.19120 / 0.19150</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>USD/BRL</strong> — seu par de confiança, spreads baixos e movimentos limpos</li>
+      <li>Preço cai suavemente até <strong>testar o suporte 0.19120</strong> com pavio longo</li>
+      <li class="c">Martelo PERFEITO na 5ª vela — rejeição clara dos vendedores</li>
+      <li class="gold">Entrada <strong>0.19142</strong> — preço quebrou nível XX25, mirando XX50</li>
+      <li class="p"><strong>Expiry 5s</strong> — o movimento foi rápido mas certeiro</li>
+      <li class="g"><strong>Lucro: €17,37</strong> — múltiplas entradas no mesmo nível</li>
+      <li class="b"><strong>Dica:</strong> USD/BRL às 10:34 BR = abertura de NY. Maior liquidez do dia.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 5: EUR/USD OTC ===== -->
+<section class="section" id="t5">
+  <div class="num-badge"><span class="n">5</span><span>EUR/USD OTC — Pullback + Martelo</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>EUR/USD: Queda de 4 Velas + Martelo no 1.17300</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">92% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">📈 Pullback</span>
+      </div>
+      <div class="vis-ref">📷 image 25.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+€7,68</div><div class="sub">Lucro • 12:44 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">EUR/USD OTC · M1</div>
+    <div class="watermark">EURUSD</div>
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 5s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:20%"></div><div class="hl" style="top:40%"></div><div class="hl" style="top:60%"></div><div class="hl" style="top:80%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>1.17400</span><span>1.17350</span><span>1.17300</span><span>1.17250</span><span>1.17200</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 1.17235</span></div>
+      <div class="eline" style="bottom:28%"><span class="el">ENTRADA 1.17306</span></div>
+
+      <!-- C1: bull 1.17250→1.17290 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:22%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C2: bull 1.17290→1.17350 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:30%;height:24%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:26%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C3: bull 1.17350→1.17390 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:36%;height:22%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C4: bear 1.17390→1.17360 -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:32%;height:20%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:8%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C5: bear 1.17360→1.17310 -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:26%;height:26%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C6: bear 1.17310→1.17270 (teste suporte) -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:18%;height:28%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C7: martelo! 1.17270→1.17295 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:20%;height:20%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C8: ENTRADA! bull 1.17295→1.17320 -->
+      <div class="cw" style="left:48%;width:6%;bottom:24%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C9: bull 1.17320→1.17360 -->
+      <div class="cw" style="left:55%;width:5.5%;bottom:30%;height:22%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C10: bull 1.17360→1.17385 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:36%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 1.17385→1.17370 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:34%;height:14%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:10%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annot r" style="bottom:40%;left:26%;transform:translateX(-50%)">4 velas vermelhas 🔴🔴🔴🔴</div>
+      <div class="annot c" style="bottom:14%;left:39%;transform:translateX(-50%)">🔨 Martelo</div>
+      <div class="annot gold" style="bottom:32%;left:50%;transform:translateX(-50%);font-size:7px">Nível 1.17300!</div>
+      <div class="entry-arrow g" style="bottom:30%;left:51%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>12:24</span><span>12:32</span><span>12:40</span><span>12:48</span><span>12:56</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">1.17306</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">1.17315</div></div>
+    <div class="gi"><div class="key">Velas Vermelhas</div><div class="val r">4 consecutivas</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">Pullback + Martelo</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">1.17300</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li>Movimento inicial de alta forte: <strong>1.17250 → 1.17390</strong> (+14 pips)</li>
+      <li>Depois <strong>pullback (correção)</strong> de 4 velas vermelhas testando o suporte</li>
+      <li class="c">Martelo no suporte exato em <strong>1.17270</strong> — pavio longo + corpo verde pequeno</li>
+      <li class="gold">Preço encontrou suporte ACIMA do nível psicológico <strong>1.17300</strong></li>
+      <li class="p"><strong>Entrada 1.17306</strong> — CALL com <strong>5s de expiry</strong></li>
+      <li class="g"><strong>Lucro: €7,68</strong> — a tendência original foi retomada</li>
+      <li class="b"><strong>Lição:</strong> Pullback em tendência = entrada com risco menor. Espere rejeição.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 6: USD/ARS OTC ===== -->
+<section class="section" id="t6">
+  <div class="num-badge"><span class="n">6</span><span>USD/ARS OTC — Volatilidade 30s</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>USD/ARS: Rompimento Explosivo — Expiry Diferente!</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry30">⏱ 30s</span>
+        <span class="tag payout">92% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">🌊 Volatilidade</span>
+      </div>
+      <div class="vis-ref">📷 image 35.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+€3,84</div><div class="sub">Lucro • 14:04 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">USD/ARS OTC · M1</div>
+    <div class="watermark">USDARS</div>
+    <div class="expiry-indicator expiry30" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 30s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:25%"></div><div class="hl" style="top:50%"></div><div class="hl" style="top:75%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>1494.80</span><span>1494.60</span><span>1494.40</span><span>1494.20</span><span>1494.00</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 1494.00</span></div>
+      <div class="eline" style="bottom:28%"><span class="el">ENTRADA 1494.25</span></div>
+
+      <!-- C1: bear 1494.70→1494.50 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:24%;height:24%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C2: bear 1494.50→1494.30 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:18%;height:26%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C3: bear 1494.30→1494.15 (teste) -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:14%;height:24%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:16%"></div><div class="wk" style="height:10%"></div></div></div>
+      <!-- C4: bull 1494.15→1494.22 (martelo) -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:16%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:8%"></div><div class="wk" style="height:12%"></div></div></div>
+      <!-- C5: bear 1494.22→1494.12 (2º teste) -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:12%;height:22%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:10%"></div></div></div>
+      <!-- C6: bull 1494.12→1494.30 (martelo 2) -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:18%;height:20%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C7: bull 1494.30→1494.45 -->
+      <div class="cw" style="left:41%;width:5.5%;bottom:22%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C8: ENTRADA! BULL FORTE 1494.45→1494.58 -->
+      <div class="cw" style="left:48%;width:6%;bottom:28%;height:22%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C9: bull 1494.58→1494.70 -->
+      <div class="cw" style="left:55%;width:5.5%;bottom:30%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C10: bull 1494.70→1494.78 -->
+      <div class="cw" style="left:61.5%;width:5.5%;bottom:34%;height:14%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: doji 1494.78→1494.76 -->
+      <div class="cw" style="left:68%;width:5.5%;bottom:32%;height:12%"><div class="cc bear" style="height:100%"><div class="wk" style="height:6%"></div><div class="bd" style="height:4%"></div><div class="wk" style="height:6%"></div></div></div>
+
+      <div class="annot c" style="bottom:10%;left:24%;transform:translateX(-50%)">Fundo duplo</div>
+      <div class="annot g" style="bottom:40%;left:51%;transform:translateX(-50%)">✅ CALL</div>
+      <div class="annot o" style="bottom:50%;right:20%">⏱ 30s!</div>
+      <div class="entry-arrow g" style="bottom:32%;left:51%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>14:04</span><span>14:12</span><span>14:20</span><span>14:28</span><span>14:36</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">1494.25</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">1494.58</div></div>
+    <div class="gi"><div class="key">Fundo Testado</div><div class="val b">2×</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val c">Fundo duplo + impulso</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">1494.00</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val o">30 SEGUNDOS</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>USD/ARS</strong> — par extremamente volátil, spreads maiores, mas movimentos explosivos</li>
+      <li>Preço <strong>testou o suporte 1494.00</strong> duas vezes com martelos</li>
+      <li class="o"><strong>🚨 ATENÇÃO:</strong> Este trade usou <strong>expiry de 30 SEGUNDOS</strong>, não 5s! Mais tempo para o movimento se desenvolver</li>
+      <li>Após o 2º martelo, o preço começou a subir com velas verdes consecutivas</li>
+      <li class="g"><strong>Entrada 1494.25</strong> — CALL na 3ª vela verde de confirmação</li>
+      <li class="g"><strong>Lucro: €3,84</strong> com investimento de €2</li>
+      <li class="b"><strong>Dica:</strong> Pares voláteis (USD/ARS) pedem expiry maior. 30s deu tempo suficiente.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 7: AUD/CAD OTC ===== -->
+<section class="section" id="t7">
+  <div class="num-badge"><span class="n">7</span><span>AUD/CAD OTC — Marubozu Explosivo</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>Consolidação Longa + Marubozu = Rompimento Violento</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">92% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">⚡ Momentum</span>
+      </div>
+      <div class="vis-ref">📷 image 50.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+R$ 19,20</div><div class="sub">Lucro • 23:24 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">AUD/CAD OTC · M1</div>
+    <div class="watermark">AUDCAD</div>
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 5s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:20%"></div><div class="hl" style="top:40%"></div><div class="hl" style="top:60%"></div><div class="hl" style="top:80%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>0.96300</span><span>0.96275</span><span>0.96250</span><span>0.96225</span><span>0.96200</span>
+      </div>
+      <div class="sline" style="bottom:8%"><span class="sl">Suporte 0.96200</span></div>
+      <div class="eline" style="bottom:34%"><span class="el">ENTRADA 0.96262</span></div>
+
+      <!-- C1: bear 0.96300→0.96270 -->
+      <div class="cw" style="left:2%;width:4.5%;bottom:34%;height:18%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:16%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C2: bear 0.96270→0.96240 -->
+      <div class="cw" style="left:7.5%;width:4.5%;bottom:28%;height:20%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C3: doji 0.96240→0.96235 -->
+      <div class="cw" style="left:13%;width:4.5%;bottom:26%;height:16%"><div class="cc bear" style="height:100%"><div class="wk" style="height:6%"></div><div class="bd" style="height:4%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C4: bear 0.96235→0.96218 -->
+      <div class="cw" style="left:18.5%;width:4.5%;bottom:22%;height:20%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C5: bull 0.96218→0.96228 -->
+      <div class="cw" style="left:24%;width:4.5%;bottom:24%;height:14%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:8%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C6: bear 0.96228→0.96215 -->
+      <div class="cw" style="left:29.5%;width:4.5%;bottom:20%;height:18%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:12%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C7: bull 0.96215→0.96235 (martelo) -->
+      <div class="cw" style="left:35%;width:4.5%;bottom:26%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:10%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C8: bull 0.96235→0.96260 (marubozu!) -->
+      <div class="cw" style="left:40.5%;width:5%;bottom:34%;height:20%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C9: ENTRADA! MEGA BULL 0.96260→0.96280 -->
+      <div class="cw" style="left:47%;width:6%;bottom:40%;height:24%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:26%"></div><div class="wk" style="height:2%"></div></div></div>
+      <!-- C10: bull 0.96280→0.96300 -->
+      <div class="cw" style="left:54%;width:4.5%;bottom:48%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 0.96300→0.96290 -->
+      <div class="cw" style="left:59.5%;width:4.5%;bottom:44%;height:16%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:10%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C12: bull 0.96290→0.96305 -->
+      <div class="cw" style="left:65%;width:4.5%;bottom:46%;height:14%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C13: bear 0.96305→0.96295 -->
+      <div class="cw" style="left:70.5%;width:4.5%;bottom:44%;height:14%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:8%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annot y" style="bottom:18%;left:22%;transform:translateX(-50%)">⏸ Consolidação longa</div>
+      <div class="annot p" style="bottom:34%;left:42%;transform:translateX(-50%)">🌋 MARUBOZU!</div>
+      <div class="annot g" style="bottom:56%;left:50%;transform:translateX(-50%)">✅ CALL</div>
+      <div class="entry-arrow g" style="bottom:44%;left:50%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>23:12</span><span>23:20</span><span>23:28</span><span>23:36</span><span>23:44</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">0.96262</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">0.96265+</div></div>
+    <div class="gi"><div class="key">Consolidação</div><div class="val gold">8 velas!</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val p">🌋 Marubozu</div></div>
+    <div class="gi"><div class="key">Nível Chave</div><div class="val gold">0.96250</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>23:12-23:22</strong> — Longa consolidação (~8 velas) entre 0.96200 e 0.96240</li>
+      <li>Mercado indeciso, compradores e vendedores em equilíbrio</li>
+      <li class="p">De repente, um <strong>MARUBOZU</strong> (vela sem pavios!) rompeu toda a congestão — pressão compradora avassaladora</li>
+      <li class="c"><strong>Marubozu</strong> = o corpo cheio ocupa toda a vela. Sinal de força máxima.</li>
+      <li class="g"><strong>Entrada 0.96262</strong> — CALL imediatamente no rompimento, expiry <strong>5s</strong></li>
+      <li class="g"><strong>Lucro: R$ 19,20</strong> — o rompimento foi violento e rápido</li>
+      <li class="b"><strong>Regra:</strong> Consolidação longa + Marubozu = sua melhor oportunidade do dia. Entre sem hesitar.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== TRADE 8: GBP/NZD OTC ===== -->
+<section class="section" id="t8">
+  <div class="num-badge"><span class="n">8</span><span>GBP/NZD OTC — O Tsunami</span></div>
+  <div class="header-row">
+    <div class="title-area">
+      <h2>GBP/NZD: Queda de 5 Velas + Reversão de +R$267!</h2>
+      <div class="tags">
+        <span class="tag otc">OTC</span><span class="tag m1">M1</span>
+        <span class="tag expiry expiry5">⏱ 5s</span>
+        <span class="tag payout">91% Payout</span><span class="tag type">CALL</span>
+        <span class="tag pattern">🌊 Tsunami Reversal</span>
+      </div>
+      <div class="vis-ref">📷 image 12.png</div>
+    </div>
+    <div class="result-box">
+      <div><div class="amount">+R$ 267,40</div><div class="sub">Lucro • ~15:20 UTC</div></div>
+    </div>
+  </div>
+
+  <div class="chart-box">
+    <div class="clabel">GBP/NZD OTC · M1</div>
+    <div class="watermark">GBPNZD</div>
+    <div class="expiry-indicator expiry5" style="top:10px;right:16px;"><span class="icon"></span> EXPIRY 5s</div>
+    <div class="chart">
+      <div class="grid">
+        <div class="hl" style="top:0%"></div><div class="hl" style="top:20%"></div><div class="hl" style="top:40%"></div><div class="hl" style="top:60%"></div><div class="hl" style="top:80%"></div><div class="hl" style="top:100%"></div>
+        <div class="vl" style="left:12.5%"></div><div class="vl" style="left:25%"></div><div class="vl" style="left:37.5%"></div><div class="vl" style="left:50%"></div><div class="vl" style="left:62.5%"></div><div class="vl" style="left:75%"></div><div class="vl" style="left:87.5%"></div>
+      </div>
+      <div class="plabels">
+        <span>1.94000</span><span>1.93800</span><span>1.93600</span><span>1.93400</span><span>1.93200</span>
+      </div>
+      <div class="sline" style="bottom:6%"><span class="sl">Suporte 1.93170</span></div>
+      <div class="eline" style="bottom:10%"><span class="el">ENTRADA 1.93170</span></div>
+
+      <!-- C1: bull 1.93400→1.93600 -->
+      <div class="cw" style="left:2%;width:5.5%;bottom:38%;height:32%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:30%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C2: bear 1.93600→1.93450 -->
+      <div class="cw" style="left:8.5%;width:5.5%;bottom:34%;height:30%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:24%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C3: bear 1.93450→1.93350 -->
+      <div class="cw" style="left:15%;width:5.5%;bottom:28%;height:28%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:22%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C4: bear 1.93350→1.93280 -->
+      <div class="cw" style="left:21.5%;width:5.5%;bottom:22%;height:26%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:6%"></div></div></div>
+      <!-- C5: bear 1.93280→1.93220 -->
+      <div class="cw" style="left:28%;width:5.5%;bottom:18%;height:24%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:8%"></div></div></div>
+      <!-- C6: bear 1.93220→1.93170 (teste suporte!) -->
+      <div class="cw" style="left:34.5%;width:5.5%;bottom:10%;height:28%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:4%"></div><div class="bd" style="height:14%"></div><div class="wk" style="height:14%"></div></div></div>
+      <!-- C7: martelo + ENTRADA! 1.93170→1.93210 -->
+      <div class="cw" style="left:41%;width:6%;bottom:14%;height:22%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:16%"></div><div class="wk" style="height:12%"></div></div></div>
+      <!-- C8: bull forte 1.93210→1.93300 -->
+      <div class="cw" style="left:48%;width:6%;bottom:22%;height:28%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:28%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C9: MEGA BULL 1.93300→1.93450 -->
+      <div class="cw" style="left:55%;width:6%;bottom:34%;height:36%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:36%"></div><div class="wk" style="height:2%"></div></div></div>
+      <!-- C10: bull 1.93450→1.93580 -->
+      <div class="cw" style="left:62%;width:5.5%;bottom:46%;height:34%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:32%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C11: bear 1.93580→1.93500 -->
+      <div class="cw" style="left:68.5%;width:5.5%;bottom:40%;height:26%"><div class="cc bear" style="height:100%;justify-content:flex-end"><div class="wk" style="height:6%"></div><div class="bd" style="height:20%"></div><div class="wk" style="height:4%"></div></div></div>
+      <!-- C12: bull 1.93500→1.93550 -->
+      <div class="cw" style="left:75%;width:5.5%;bottom:42%;height:18%"><div class="cc bull" style="height:100%;justify-content:flex-start"><div class="wk" style="height:4%"></div><div class="bd" style="height:18%"></div><div class="wk" style="height:4%"></div></div></div>
+
+      <div class="annot r" style="bottom:44%;left:22%;transform:translateX(-50%)">5 velas vermelhas 🔴🔴🔴🔴🔴</div>
+      <div class="annot g" style="bottom:4%;left:39%;transform:translateX(-50%)">🔨 Martelo + ENTRADA!</div>
+      <div class="annot p" style="bottom:60%;left:58%;transform:translateX(-50%)">🚀 DISPARADA!</div>
+      <div class="entry-arrow g" style="bottom:18%;left:44%">▲</div>
+    </div>
+    <div class="ctime">
+      <span>15:04</span><span>15:12</span><span>15:20</span><span>15:28</span><span>15:36</span>
+    </div>
+  </div>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Entrada</div><div class="val g">1.93170</div></div>
+    <div class="gi"><div class="key">Fechamento</div><div class="val g">1.93421</div></div>
+    <div class="gi"><div class="key">Velas Vermelhas</div><div class="val r">5 consecutivas</div></div>
+    <div class="gi"><div class="key">Padrão</div><div class="val p">🌊 Reversão Tsunami</div></div>
+    <div class="gi"><div class="key">Movimento</div><div class="val gold">+251 pips!</div></div>
+    <div class="gi"><div class="key">Expiry</div><div class="val p">5 segundos</div></div>
+  </div>
+
+  <div class="abox">
+    <h4>📖 O que aconteceu</h4>
+    <ul>
+      <li><strong>MAIOR LUCRO DE TODOS: R$ 267,40!</strong></li>
+      <li>Queda violenta de <strong>1.94000 → 1.93170</strong> em 6 velas (5 vermelhas + 1 de teste)</li>
+      <li class="c">A 6ª vela de teste tocou EXATAMENTE o suporte <strong>1.93170</strong> com pavio gigante</li>
+      <li class="gold">Nível psicológico <strong>1.93200</strong> quebrado — suporte encontrado exatamente em 1.93170</li>
+      <li class="g"><strong>Entrada 1.93170</strong> — CALL com <strong>5s expiry</strong> no fechamento do martelo</li>
+      <li class="g"><strong>Lucro: R$ 267,40</strong> — movimento de 251 pips em menos de 1 minuto!</li>
+      <li class="b"><strong>Lição:</strong> Quanto maior a queda, maior o反弹. 5 velas vermelhas + suporte = TSUNAMI de reversão.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===== CHEAT SHEET ===== -->
+<section class="cheatsheet" id="cs">
+  <h2>📋 <span>Cheat Sheet</span> — Resumo em 30 Segundos</h2>
+
+  <div class="grid-info">
+    <div class="gi"><div class="key">Padrão #1</div><div class="val g">3-5 🔴 + 🔨 = CALL</div></div>
+    <div class="gi"><div class="key">Expiry Padrão</div><div class="val p">5s (92%)</div></div>
+    <div class="gi"><div class="key">Expiry Alternativo</div><div class="val b">10s (CAD/CHF)</div></div>
+    <div class="gi"><div class="key">Expiry Longo</div><div class="val o">30s (USD/ARS)</div></div>
+    <div class="gi"><div class="key">Timeframe</div><div class="val gold">M1 (1 min/vela)</div></div>
+    <div class="gi"><div class="key">Melhor Horário</div><div class="val c">09:20-09:44 BR</div></div>
+    <div class="gi"><div class="key">2º Horário</div><div class="val">18:00-20:00 BR</div></div>
+    <div class="gi"><div class="key">Níveis Mágicos</div><div class="val gold">XX00/XX25/XX50/XX75</div></div>
+  </div>
+
+  <div class="cs-grid">
+    <div class="cs-card">
+      <h3>✅ Regras de Ouro</h3>
+      <ul>
+        <li>SÓ entre com 3-5 velas vermelhas consecutivas</li>
+        <li>ESPERE o martelo (pavio 2× o corpo) fechar</li>
+        <li>ENTRE na primeira vela verde após o martelo</li>
+        <li>Payout mínimo: 90%</li>
+        <li>Níveis suporte: XX00 • XX25 • XX50 • XX75</li>
+        <li>Horário principal: abertura Londres (09:24-09:44 BR)</li>
+        <li>Expiry 5s na maioria dos casos</li>
+        <li>2 perdas seguidas = STOP 30 minutos</li>
+      </ul>
+    </div>
+    <div class="cs-card bad">
+      <h3>❌ Erros Fatais</h3>
+      <ul>
+        <li>Não force entrada sem o martelo</li>
+        <li>Não opere no horário de notícias (FOMC, NFP)</li>
+        <li>Não aumente valor após perda (tilt)</li>
+        <li>Não entre em pares com payout &lt;85%</li>
+        <li>Não use expiry &gt;1 minuto em pares normais</li>
+        <li>Não ignore níveis psicológicos</li>
+        <li>Não negocie na raiva ou por vingança</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="protips">
+    <h3>⚡ Pro Tips do Mentor</h3>
+    <ul>
+      <li><strong>🔨 Martelo é sagrado:</strong> Pavio inferior 2× o corpo = rejeição confirmada. O gatilho mais confiável.</li>
+      <li><strong>📊 5 velas vermelhas > 3:</strong> Quanto maior a sequência de queda, mais forte a reversão.</li>
+      <li><strong>🔁 Fundo duplo/triplo:</strong> Preço testa o mesmo nível 2-3× sem romper → CALL. Terceira vez é a certeira.</li>
+      <li><strong>🌋 Marubozu:</strong> Vela sem pavios = força avassaladora. Entre nela sem pensar.</li>
+      <li><strong>💰 USD/BRL é seu amigo:</strong> Menos volátil, spreads baixos, padrão limpo. Use como base.</li>
+      <li><strong>⏱ Expiry importa:</strong> 5s padrão (92% dos casos). 10s para pares lentos (CAD/CHF). 30s para voláteis (USD/ARS).</li>
+      <li><strong>🛑 Stop de horário:</strong> 2 perdas seguidas = 30min OFF. O mercado muda de fase, respeite.</li>
+      <li><strong>🎯 Níveis psicológicos:</strong> Preços redondos são ímãs de reversão. Preste atenção redobrada neles.</li>
+      <li><strong>📈 Payout 93%+:</strong> Você só precisa acertar 52% para ter lucro. A matemática está a seu favor.</li>
+      <li><strong>🧠 Mente fria:</strong> Depois de uma perda, respire. O mercado sempre dá outra chance. Não force.</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<footer class="footer">
+  <p><strong>Day Trader Success</strong> · 8 réplicas fiéis dos prints reais · Quotex OTC · M1 · Expiry 5s/10s/30s</p>
+  <p style="margin-top:6px;">Dados extraídos de 14+ imagens reais · Criado por <strong>Athena</strong> (Mind$un)</p>
+  <p style="margin-top:6px;opacity:.6;">⏱ Cada gráfico = 1 minuto por vela · 🔴⬇️ = Bear · 🟢⬆️ = Bull · 🔨 = Martelo</p>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.nav-tab');
+  const sections = document.querySelectorAll('.section, .cheatsheet');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tabs.forEach(t => t.classList.remove('active'));
+        const id = entry.target.id;
+        const tab = document.querySelector(`.nav-tab[href="#${id}"]`);
+        if (tab) tab.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25, rootMargin: '-80px 0px 0px 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
