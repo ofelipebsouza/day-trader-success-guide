@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📊 Day Trader Success — Guia Visual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0a0a0f;
+    color: #e4e4e7;
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 28px; color: #22c55e; margin-bottom: 4px; }
+  h2 { font-size: 20px; color: #e4e4e7; margin: 32px 0 16px; display: flex; align-items: center; gap: 8px; }
+  h3 { font-size: 16px; color: #a1a1aa; margin: 20px 0 8px; }
+  .sub { color: #71717a; font-size: 14px; margin-bottom: 24px; }
+
+  .chart {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 4px 4px 0;
+  }
+  .tag-call { background: #166534; color: #86efac; }
+  .tag-time { background: #1e3a5f; color: #93c5fd; }
+  .tag-price { background: #5b1e3a; color: #f9a8d4; }
+  .tag-win { background: #166534; color: #86efac; }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .info-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .info-label { font-size: 11px; color: #71717a; text-transform: uppercase; letter-spacing: 0.5px; }
+  .info-value { font-size: 16px; font-weight: 700; color: #e4e4e7; margin-top: 4px; }
+
+  .step {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 8px 0;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .step-num {
+    background: #22c55e;
+    color: #052e16;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { color: #22c55e; }
+
+  hr { border: none; border-top: 1px solid #27272a; margin: 32px 0; }
+
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 8px 12px;
+    margin: 4px 0;
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .checklist li::before { content: "□ "; color: #71717a; }
+  .checklist li.pass::before { content: "✅ "; color: #22c55e; }
+  .checklist li.fail::before { content: "❌ "; color: #ef4444; }
+
+  .note {
+    background: #1c1917;
+    border: 1px solid #713f12;
+    border-left: 3px solid #f59e0b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #fbbf24;
+    margin: 16px 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>📊 Day Trader Success</h1>
+<p class="sub">Guia visual completo — Estratégia Quotex M1 · 10 exemplos reais</p>
+
+<!-- ============================================================ -->
+<!-- EXEMPLO 1 -->
+<!-- ============================================================ -->
+<h2>🔷 Exemplo 1 — USD/BRL · 09:33 BR</h2>
+<div class="info-grid">
+  <div class="info-card"><div class="info-label">Ativo</div><div class="info-value">USD/BRL OTC</div></div>
+  <div class="info-card"><div class="info-label">Horário</div><div class="info-value">09:33 BR</div></div>
+  <div class="info-card"><div class="info-label">Entrada</div><div class="info-value">0.19142</div></div>
+  <div class="info-card"><div class="info-label">Lucro</div><div class="info-value">€17.37</div></div>
+</div>
+<div class="chart">
+                         USD/BRL · M1 · 09:33 BR
+
+ 0.19200 ─────────────────────────────────────────────────
+ 0.19180 ─────────────────────────────────────────────────
+ 0.19160 ────────────────────┐┌────────────────────────────
+                             ││
+ 0.19150 ────────────────────┘└── NÍVEL PSICOLÓGICO ───────
+                             │
+ 0.19142 ────── ENTRADA ═════╪══════════════════════════════
+                             │
+ 0.19130 ────────────────────┘└────────────────────────────
+
+        ╔══════════════════════════════════════════════╗
+        ║  VELA 1   VELA 2   VELA 3   VELA 4   VELA 5 ║
+        ║  🔴       🔴       🔴       🔴       🟢     ║
+        ║  ████     ████     ████     ┌──┐     ┌──┐   ║
+        ║  ████     ████     ┌──┐     │  │     │  │   ║
+        ║  ████     ┌──┐     │  │     │  │     │  │   ║
+        ║ ┌──┐     │  │     │  │     │  │     │  │   ║
+        ║ │  │     │  │     │  │     └──┘     └──┘   ║
+        ║ │  │     └──┘     └──┘            PAVIO!   ║
+        ╚══════════════════════════════════════════════╝
+          ⬇️ TENDÊNCIA ⬇️       🛑 REJEIÇÃO    ✅ CALL
+
+   📍 SUPORTE em 0.19130-0.19140
+   🔨 Vela 4 tem PAVIO INFERIOR LONGO (rejeitou)
+   🟢 Vela 5 fecha VERDE → ENTRA CALL no fechamento
+</div>
+
+<!-- ============================================================ -->
+<!-- EXEMPLO 2 -->
+<!-- ============================================================ -->
+<h2>🔷 Exemplo 2 — EUR/USD · 09:44 BR</h2>
+<div class="info-grid">
+  <div class="info-card"><div class="info-label">Ativo</div><div class="info-value">EUR/USD OTC</div></div>
+  <div class="info-card"><div class="info-label">Horário</div><div class="info-value">09:44 BR</div></div>
+  <div class="info-card"><div class="info-label">Entrada</div><div class="info-value">1.17306</div></div>
+  <div class="info-card"><div class="info-label">Lucro</div><div class="info-value">€7.68</div></div>
+</div>
+<div class="chart">
+                         EUR/USD · M1 · 09:44 BR
+
+ 1.17400 ─────────────────────────────────────────────────
+ 1.17380 ─────────────────────────────────────────────────
+ 1.17360 ────────────────────┐┌───────────────────────────
+ 1.17340 ────────────────────││───────────────────────────
+                             ││
+ 1.17320 ────────────────────││───────────────────────────
+                             ││
+ 1.17306 ────── ENTRADA ═════╪═════════════════════════════
+                             │
+ 1.17300 ────── SUPORTE ═════╪═════════════════════════════
+                             │
+        ╔══════════════════════════════════════════════════╗
+        ║  VELA 1    VELA 2    VELA 3    VELA 4    VELA 5 ║
+        ║  🔴        🔴        🔴        🔴        🟢    ║
+        ║  ████      ████      ┌──┐      ┌──┐      ┌──┐  ║
+        ║  ████      ┌──┐      │  │      │  │      │  │  ║
+        ║  ████      │  │      │  │      │  │      │  │  ║
+        ║ ┌──┐      │  │      │  │      │  │      │  │  ║
+        ║ │  │      │  │      │  │      └──┘      └──┘  ║
+        ║ │  │      └──┘      └──┘                      ║
+        ╚══════════════════════════════════════════════════╝
+           ⬇️⬇️⬇️ TENDÊNCIA          🛑 REJEITOU    ✅
+
+   📍 SUPORTE em 1.17300 (nível psicológico REDONDO!)
+   🔨 Vela 4 toca 1.17306 e SOBE — rejeitou no suporte
+   🟢 Vela 5 fecha verde → CALL 1min
+</div>
+
+<!-- ============================================================ -->
+<!-- EXEMPLO 3 -->
+<!-- ============================================================ -->
+<h2>🔷 Exemplo 3 — CHF/JPY · 09:25 BR</h2>
+<div class="info-grid">
+  <div class="info-card"><div class="info-label">Ativo</div><div class="info-value">CHF/JPY OTC</div></div>
+  <div class="info-card"><div class="info-label">Horário</div><div class="info-value">09:25 BR</div></div>
+  <div class="info-card"><div class="info-label">Entrada</div><div class="info-value">199.480</div></div>
+  <div class="info-card"><div class="info-label">Lucro</div><div class="info-value">€5.79</div></div>
+</div>
+<div class="chart">
+                       CHF/JPY · M1 · 09:25 BR
+
+ 199.600 ────────────────────────────────────────────────
+ 199.580 ────────────────────────────────────────────────
+ 199.560 ────────────────────┐┐──────────────────────────
+                             ││
+ 199.540 ────────────────────││──────────────────────────
+                             ││
+ 199.520 ────────────────────││──────────────────────────
+                             ││
+ 199.500 ────── SUPORTE ═════╪═══════════════════════════
+                             │
+ 199.480 ────── ENTRADA ═════╪═══════════════════════════
+                             │
+        ╔══════════════════════════════════════════════════╗
+        ║ VELA 1   VELA 2   VELA 3   VELA 4   VELA 5    ║
+        ║ 🔴       🔴       🔴       🔴 🟢    🟢       ║
+        ║ ████     ████     ████     ┌──┐    ┌──┐      ║
+        ║ ████     ████     ┌──┐     │  │    │  │      ║
+        ║ ┌──┐     ┌──┐     │  │     │  │    │  │      ║
+        ║ │  │     │  │     │  │     │  │    │  │      ║
+        ║ │  │     │  │     │  │     │  │    └──┘      ║
+        ║ │  │     │  │     │  │     └──┘              ║
+        ║ └──┘     └──┘     └──┘                      ║
+        ╚══════════════════════════════════════════════════╝
+          ⬇️⬇️⬇️              🔨 MARTELO    ✅ GANHOU
+
+   📍 SUPORTE em 199.500 — PREÇO NÍVEL PSICOLÓGICO XX50
+   🔨 Vela 4 é um MARTELO (pavio longo pra baixo + corpo pequeno)
+   🟢 Vela 5 confirma reversão → CALL 1min
+</div>
+
+<!-- ============================================================ -->
+<!-- EXEMPLO 4 — NOITE -->
+<!-- ============================================================ -->
+<h2>🔷 Exemplo 4 — USD/ARS · 18:25 BR (noturno)</h2>
+<div class="info-grid">
+  <div class="info-card"><div class="info-label">Ativo</div><div class="info-value">USD/ARS OTC</div></div>
+  <div class="info-card"><div class="info-label">Horário</div><div class="info-value">18:25 BR</div></div>
+  <div class="info-card"><div class="info-label">Entrada</div><div class="info-value">1487.76</div></div>
+  <div class="info-card"><div class="info-label">Lucro</div><div class="info-value">R$345.60</div></div>
+</div>
+<div class="chart">
+                      USD/ARS · M1 · 18:25 BR
+
+ 1489.50 ─────────────────────────────────────────────────
+ 1489.25 ─────────────────────────────────────────────────
+ 1489.00 ─────────────────────────────────────────────────
+ 1488.75 ────────────────────┐┐───────────────────────────
+                             ││
+ 1488.50 ────────────────────││───────────────────────────
+                             ││
+ 1488.25 ────────────────────││───────────────────────────
+                             ││
+ 1488.00 ────────────────────││───────────────────────────
+                             ││
+ 1487.75 ────── SUPORTE ═════╪════════════════════════════
+                             │
+ 1487.76 ────── ENTRADA ═════╪════════════════════════════
+                             │
+ 1487.50 ────────────────────┘└───────────────────────────
+
+        ╔══════════════════════════════════════════════════╗
+        ║ V1    V2    V3    V4    V5    V6    V7    V8   ║
+        ║ 🔴    🔴    🔴    🔴    🔴    🔴    🔴   🟢  ║
+        ║ ██    ██    ██    ██    ┌┐    ┌┐    ┌┐   ┌┐  ║
+        ║ ██    ██    ██    ┌┐    ││    ││    ││   ││  ║
+        ║ ██    ██    ┌┐    ││    ││    ││    ││   ││  ║
+        ║ ██    ┌┐    ││    ││    ││    ││    ││   ││  ║
+        ║ ┌┐    ││    ││    ││    ││    ││    ││   └┘  ║
+        ║ ││    ││    ││    ││    ││    ││    └┘       ║
+        ║ └┘    └┘    └┘    └┘    └┘    └┘            ║
+        ╚══════════════════════════════════════════════════╝
+           📉📉📉 TENDÊNCIA FORTE 📉📉📉    🔨   ✅
+
+   📍 TENDÊNCIA: 7 velas vermelhas SÓLIDAS descendo
+   🛑 SUPORTE em 1487.75 — nível psicológico (múltiplo de 25)
+   🔨 Vela 7: pavio inferior toca 1487.76 e REJEITA
+   ✅ Vela 8: CALL 1min → lucro R$345.60
+</div>
+
+<!-- ============================================================ -->
+<!-- EXEMPLO 5 — GBP/NZD -->
+<!-- ============================================================ -->
+<h2>🔷 Exemplo 5 — GBP/NZD · 12:20 BR (maior lucro)</h2>
+<div class="info-grid">
+  <div class="info-card"><div class="info-label">Ativo</div><div class="info-value">GBP/NZD OTC</div></div>
+  <div class="info-card"><div class="info-label">Horário</div><div class="info-value">12:20 BR</div></div>
+  <div class="info-card"><div class="info-label">Entrada</div><div class="info-value">1.93170</div></div>
+  <div class="info-card"><div class="info-label">Lucro</div><div class="info-value">R$267.40</div></div>
+</div>
+<div class="chart">
+                      GBP/NZD · M1 · 12:20 BR
+
+ 1.93450 ────── STRIKE (fechamento) ─────────────────────
+ 1.93421 ═════════════════════════════════════════════════
+ 1.93400 ─────────────────────────────────────────────────
+ 1.93350 ─────────────────────────────────────────────────
+ 1.93300 ─────────────────────────────────────────────────
+ 1.93250 ─────────────────────────────────────────────────
+ 1.93200 ────── SUPORTE ──────────────────────────────────
+                             │
+ 1.93170 ══════ ENTRADA ═════╪════════════════════════════
+                             │
+        ╔══════════════════════════════════════════════════╗
+        ║ V1    V2    V3    V4    V5    V6    V7    V8   ║
+        ║ 🔴    🔴    🔴    🔴    🔴    ┌─┐   🟢   🟢  ║
+        ║ ██    ██    ██    ┌─┐   ┌─┐   │ │   ██   ██  ║
+        ║ ██    ██    ┌─┐   │ │   │ │   │ │   ██   ██  ║
+        ║ ██    ┌─┐   │ │   │ │   │ │   │ │   ██   ██  ║
+        ║ ┌─┐   │ │   │ │   │ │   │ │   │ │   └─┘   ██  ║
+        ║ │ │   │ │   │ │   │ │   │ │   │ │         └─┘  ║
+        ║ └─┘   └─┘   └─┘   └─┘   └─┘   └─┘             ║
+        ╚══════════════════════════════════════════════════╝
+           ⬇️⬇️⬇️⬇️⬇️  🔨   ⬆️⬆️ SUBIU MUITO
+
+   📍 ENTRADA em 1.93170 — quase 1.93200 (nível XX00)
+   🔨 Vela 6: martelo com pavio inferior no suporte
+   ✅ Vela 7-8: SOBE FORTE → strike 1.93421
+   💰 Lucro: R$267.40 em 1 minuto!
+</div>
+
+<!-- ============================================================ -->
+<!-- CHECKLIST RÁPIDO -->
+<!-- ============================================================ -->
+<h2>✅ Checklist para sua próxima operação</h2>
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-content"><strong>Escolha o ativo</strong> — Qualquer OTC. Preferência: EUR/USD, GBP/JPY, USD/BRL, CHF/JPY</div>
+</div>
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-content"><strong>Monitore 09:20-09:44 BR</strong> — Janela de abertura dos mercados europeus. Maior volatilidade.</div>
+</div>
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-content"><strong>Identifique 2-5 velas vermelhas</strong> descendo em M1. Preferência: corpos sólidos, sem pavios.</div>
+</div>
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-content"><strong>Veja se o preço chegou perto de um nível XX00, XX25, XX50 ou XX75</strong> — Esses são os ímãs onde o preço rejeita.</div>
+</div>
+<div class="step">
+  <div class="step-num">5</div>
+  <div class="step-content"><strong>Espere a vela com PAVIO INFERIOR LONGO</strong> (martelo/hammer) — mostra que o preço tentou cair e foi rejeitado. O pavio deve ter ≥2x o corpo da vela.</div>
+</div>
+<div class="step">
+  <div class="step-num">6</div>
+  <div class="step-content"><strong>ENTRE CALL assim que a vela de reversão FECHAR</strong> — Expiração 1 minuto. Nos primeiros 5-10 segundos do novo minuto.</div>
+</div>
+<div class="step">
+  <div class="step-num">7</div>
+  <div class="step-content"><strong>Gestão:</strong> R$1 pra testar. Se perder 2x seguidas → PARE 30 min.</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- NÍVEIS PSICOLÓGICOS -->
+<!-- ============================================================ -->
+<h2>🎯 Guia de Níveis Psicológicos por Ativo</h2>
+<p style="color:#a1a1aa;font-size:14px;margin-bottom:12px;">O preço REJEITA nestes níveis. É onde você procura o martelo.</p>
+
+<div class="chart">
+   NÍVEIS DE 50 EM 50 — ONDE O PREÇO REJEITA
+
+   EUR/USD:  1.17000  1.17100  1.17200  1.17300  1.17400
+                                      ──────
+                                    1.17306 ← ENTRADA
+                                      ──────
+                                     SUPORTE!
+
+   GBP/JPY:   215.000   215.100   215.200   215.300
+                          ──────
+                        215.115 ← ENTRADA
+                          ──────
+                         SUPORTE!
+
+   CHF/JPY:   199.400   199.450   199.500   199.550
+                                    ──────
+                                  199.480 ← ENTRADA
+                                    ──────
+                                   SUPORTE!
+
+    ---
+
+    💡 REGRA PRÁTICA:
+    Olhe o eixo Y do gráfico. Os números maiores (00, 50)
+    são os níveis psicológicos. O preço vai até eles e:
+
+    ✅ REJEITA → Você entra CALL
+    ❌ ATRAVESSA → Tendência forte, não entre
+</div>
+
+<!-- ============================================================ -->
+<!-- DICAS FINAIS -->
+<!-- ============================================================ -->
+<h2>💡 Dicas Finais</h2>
+
+<div class="note">
+  ⏰ <strong>Melhores horários:</strong> 09:20-09:44 BR (abertura Londres) e 18:20-20:41 BR (noturno)
+</div>
+<div class="note">
+  🎯 <strong>Preços-chave:</strong> Procure entradas perto de XX00, XX25, XX50, XX75 — níveis onde o preço rejeita naturalmente
+</div>
+<div class="note">
+  🔨 <strong>O martelo é sagrado:</strong> Sem pavio inferior longo, não entre. O pavio mostra que o preço FOI REJEITADO.
+</div>
+<div class="note">
+  📉 <strong>2 perdas seguidas = STOP:</strong> Não insista. O mercado não está dando o padrão hoje. Volte depois.
+</div>
+<div class="note">
+  💰 <strong>Comece pequeno:</strong> R$1 por operação até pegar confiança. Depois escala para 2-5% da banca.
+</div>
+
+<hr>
+<p style="text-align:center;color:#52525b;font-size:13px;">
+  Análise baseada em 10 operações reais dos prints Day Trader Success · Athena/Mindsun · Junho 2026
+</p>
+
+</body>
+</html>
