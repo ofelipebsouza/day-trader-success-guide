@@ -1,0 +1,11 @@
+{
+  "name": "day-trader-success",
+  "version": 2,
+  "public": true,
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/day-trader-success-guide.html" }
+  ]
+}
