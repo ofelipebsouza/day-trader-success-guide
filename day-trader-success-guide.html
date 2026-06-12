@@ -2,269 +2,464 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Day Trader Success — 29 Trades Reais</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Day Trader Success — Full Screen</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0c10;--bg2:#101318;--bg3:#151a22;--card:#181e28;--border:#242b38;--text:#e2e6ed;--text2:#8891a4;--text3:#586170;--green:#22c55e;--green-bg:rgba(34,197,94,.12);--green-glow:rgba(34,197,94,.35);--red:#ef4444;--red-bg:rgba(239,68,68,.12);--yellow:#eab308;--blue:#3b82f6;--cyan:#06b6d4;--purple:#a855f7;--orange:#f97316;--gold:#f59e0b}
+  :root {
+    --bg: #0a0c10; --card: #0f1217; --border: #1c2330; --text: #e2e6ed; --text2: #8891a4; --text3: #4d5665;
+    --green: #22c55e; --green-bg: rgba(34,197,94,.12); --red: #ef4444; --blue: #3b82f6; --gold: #f59e0b; --cyan: #06b6d4; --purple: #a855f7;
+  }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  html,body{height:100%;overflow:hidden;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+  
+  /* ===== FULLSCREEN CHART VIEW ===== */
+  .screen{
+    display:flex;flex-direction:column;
+    width:100vw;height:100vh;height:100dvh;
+    background:var(--bg);
+    position:relative;overflow:hidden;
+  }
 
-  .hero{background:linear-gradient(135deg,#0a0c10,#0f172a,#0a0c10);border-bottom:1px solid var(--border);padding:48px 24px 36px;text-align:center}
-  .hero h1{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:900;background:linear-gradient(135deg,#fff,#22c55e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .hero p{font-size:clamp(.85rem,1.5vw,1rem);color:var(--text2);max-width:600px;margin:8px auto 20px}
-  .hero-stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
-  .stat-item{text-align:center}
-  .stat-item .num{font-size:22px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace}
-  .stat-item .label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
-  .stat-item .num.gold{color:var(--gold)}.stat-item .num.blue{color:var(--blue)}.stat-item .num.purple{color:var(--purple)}
+  /* TOP BAR */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px 6px;z-index:10;flex-shrink:0;
+  }
+  .topbar .pair{
+    font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:var(--cyan);
+    display:flex;align-items:center;gap:8px;
+  }
+  .topbar .pair .badge{
+    font-size:9px;padding:2px 8px;border-radius:4px;font-weight:600;
+    background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.15);color:var(--cyan);
+  }
+  .topbar .nav{
+    display:flex;gap:10px;align-items:center;
+  }
+  .topbar .nav .counter{
+    font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;
+  }
+  .topbar .nav button{
+    width:36px;height:36px;border-radius:10px;border:1px solid var(--border);
+    background:var(--card);color:var(--text);font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:.15s;
+  }
+  .topbar .nav button:active{background:var(--border)}
 
-  .filters{position:sticky;top:0;z-index:100;background:rgba(10,12,16,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center}
-  .filters::-webkit-scrollbar{display:none}
-  .filter-btn{flex-shrink:0;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:Inter,sans-serif}
-  .filter-btn:hover{background:var(--bg3);color:var(--text)}
-  .filter-btn.active{background:var(--green-bg);border-color:rgba(34,197,94,.3);color:var(--green)}
-  .filter-btn.all{background:var(--green-bg);border-color:rgba(34,197,94,.2);color:var(--green)}
+  /* RESULT BANNER */
+  .result-banner{
+    display:flex;align-items:center;gap:10px;
+    padding:6px 14px;margin:0 14px 6px;border-radius:10px;
+    background:var(--green-bg);border:1px solid rgba(34,197,94,.2);flex-shrink:0;
+  }
+  .result-banner .icon{font-size:18px}
+  .result-banner .info{flex:1}
+  .result-banner .info .val{font-size:18px;font-weight:800;color:var(--green);font-family:'JetBrains Mono',monospace}
+  .result-banner .info .sub{font-size:10px;color:var(--text2)}
+  .result-banner .tags{display:flex;gap:4px;flex-shrink:0}
+  .result-banner .tags .tg{
+    padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;
+  }
+  .tg5s{background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);color:var(--purple)}
+  .tg10s{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);color:var(--blue)}
+  .tg30s{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);color:var(--orange)}
+  .tg1m{background:rgba(6,182,212,.15);border:1px solid rgba(6,182,212,.3);color:var(--cyan)}
+  .tg2m{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.15);color:var(--gold)}
+  .tgcall{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);color:var(--green)}
+  .tgput{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);color:var(--red)}
+  .tgpct{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--text2)}
 
-  .container{max-width:1200px;margin:0 auto;padding:0 12px}
+  /* ===== CHART AREA (fills most of screen) ===== */
+  .chart-area{
+    flex:1;position:relative;overflow:hidden;
+    margin:4px 10px 0;border-radius:14px;
+    background:var(--card);border:1px solid var(--border);
+    min-height:0;
+  }
+  .chart-area canvas{
+    position:absolute;inset:0;
+    width:100% !important;height:100% !important;
+  }
 
-  .trade-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;padding:20px 0}
+  /* BOTTOM INFO */
+  .bottom-info{
+    display:flex;gap:8px;padding:6px 14px 12px;
+    flex-shrink:0;overflow-x:auto;scrollbar-width:none;
+  }
+  .bottom-info::-webkit-scrollbar{display:none}
+  .bi{
+    flex-shrink:0;padding:6px 10px;border-radius:8px;
+    background:var(--card);border:1px solid var(--border);
+    font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;
+    display:flex;flex-direction:column;gap:1px;
+  }
+  .bi .k{font-size:8px;text-transform:uppercase;letter-spacing:.3px;color:var(--text3);opacity:.6}
+  .bi .v{font-size:12px;font-weight:600;color:var(--text)}
+  .bi .v.g{color:var(--green)}
+  .bi .v.b{color:var(--blue)}
+  .bi .v.gold{color:var(--gold)}
 
-  .trade-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .2s;cursor:default}
-  .trade-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
-  .trade-card-header{padding:14px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-  .trade-card-header .left{flex:1;min-width:0}
-  .trade-card-header .pair{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--cyan)}
-  .trade-card-header .time{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px}
-  .trade-card-header .time .iphone{color:var(--text3);opacity:.6}
-  .trade-card-header .time .gmt{color:var(--gold)}
-  .trade-card-header .result{text-align:right;flex-shrink:0}
-  .trade-card-header .result .amount{font-size:16px;font-weight:800;font-family:'JetBrains Mono',monospace}
-  .trade-card-header .result .amount.win{color:var(--green)}
-  .trade-card-header .result .sub{font-size:9px;color:var(--text3)}
+  /* SWIPE INDICATOR */
+  .swipe-hint{
+    text-align:center;padding:2px 0 4px;flex-shrink:0;
+    font-size:10px;color:var(--text3);opacity:.5;
+    letter-spacing:.5px;
+  }
 
-  .tags-line{display:flex;gap:4px;flex-wrap:wrap;padding:0 16px 8px}
-  .tg{padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;font-family:'JetBrains Mono',monospace}
-  .tg.exp5{background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.2);color:var(--purple)}
-  .tg.exp10{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:var(--blue)}
-  .tg.exp30{background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.2);color:var(--orange)}
-  .tg.exp1m{background:rgba(6,182,212,.12);border:1px solid rgba(6,182,212,.2);color:var(--cyan)}
-  .tg.exp2m{background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.15);color:var(--gold)}
-  .tg.call{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2);color:var(--green)}
-  .tg.put{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);color:var(--red)}
-  .tg.otc{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.1);color:var(--cyan);opacity:.7}
-  .tg.payout{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--text2)}
-  .tg.pattern{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.2);color:var(--blue)}
+  /* FILTER BAR */
+  .filter-bar{
+    display:flex;gap:4px;padding:4px 10px 0;
+    overflow-x:auto;scrollbar-width:none;flex-shrink:0;
+  }
+  .filter-bar::-webkit-scrollbar{display:none}
+  .fb{
+    flex-shrink:0;padding:4px 12px;border-radius:6px;
+    border:1px solid var(--border);background:var(--card);
+    color:var(--text3);font-size:10px;font-weight:600;cursor:pointer;
+    transition:.15s;font-family:Inter,sans-serif;white-space:nowrap;
+  }
+  .fb:active,.fb.active{background:var(--green-bg);border-color:rgba(34,197,94,.3);color:var(--green)}
+  .fb.all{background:var(--green-bg);border-color:rgba(34,197,94,.2);color:var(--green)}
 
-  .mini-chart{height:100px;position:relative;margin:0 12px 8px;border-radius:8px;overflow:hidden;background:var(--bg2);border:1px solid var(--border)}
-  .mini-chart .mgrid{position:absolute;inset:0;pointer-events:none}
-  .mini-chart .mgrid .mhl{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.03)}
-  .mini-chart .mcandle{position:absolute;bottom:0;border-radius:1px}
-  .mini-chart .mcandle.bull{background:var(--green)}
-  .mini-chart .mcandle.bear{background:var(--red)}
-  .mini-chart .mentry{position:absolute;left:0;right:0;border-top:1px dashed var(--green);z-index:2}
-  .mini-chart .msupport{position:absolute;left:0;right:0;border-top:1px dashed var(--blue);z-index:1;opacity:.4}
-
-  .trade-card-footer{padding:8px 16px 12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
-  .trade-card-footer .stat{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace}
-  .trade-card-footer .stat strong{color:var(--text2)}
-
-  .section-title{padding:24px 0 8px}
-  .section-title h2{font-size:clamp(1.1rem,2vw,1.4rem);font-weight:800}
-  .section-title .sub{font-size:12px;color:var(--text3);margin-top:4px}
-
-  .footer{text-align:center;padding:32px 20px;border-top:1px solid var(--border);color:var(--text3);font-size:12px}
-  .footer strong{color:var(--green)}
-
-  @media(max-width:640px){.trade-grid{grid-template-columns:1fr}.hero{padding:32px 16px 24px}.hero-stats{gap:16px}}
+  /* LIST VIEW TOGGLE */
+  .list-toggle{
+    position:fixed;bottom:70px;right:14px;z-index:100;
+    width:44px;height:44px;border-radius:50%;
+    background:var(--card);border:1px solid var(--border);
+    color:var(--text2);font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.5);backdrop-filter:blur(8px);
+    transition:.15s;
+  }
+  .list-toggle:active{background:var(--border)}
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <h1>📸 Day Trader Success</h1>
-  <p><strong>29 entradas únicas</strong> extraídas de 55 prints reais da plataforma Quotex OTC — cada card é um trade real com dados exatos de horário, preço e resultado.</p>
-  <div class="hero-stats">
-    <div class="stat-item"><div class="num">29</div><div class="label">Trades Únicos</div></div>
-    <div class="stat-item"><div class="num gold">8</div><div class="label">Pares Diferentes</div></div>
-    <div class="stat-item"><div class="num blue">27</div><div class="label">CALL ✅</div></div>
-    <div class="stat-item"><div class="num purple">2</div><div class="label">PUT</div></div>
-  </div>
-</header>
-
-<div class="filters" id="filters">
-  <button class="filter-btn all active" data-filter="all">🔬 Todos</button>
-  <button class="filter-btn" data-filter="GBP/JPY">GBP/JPY</button>
-  <button class="filter-btn" data-filter="NZD/CHF">NZD/CHF</button>
-  <button class="filter-btn" data-filter="USD/PHP">USD/PHP</button>
-  <button class="filter-btn" data-filter="CAD/CHF">CAD/CHF</button>
-  <button class="filter-btn" data-filter="AUD/CHF">AUD/CHF</button>
-  <button class="filter-btn" data-filter="GBP/NZD">GBP/NZD</button>
-  <button class="filter-btn" data-filter="USD/ARS">USD/ARS</button>
-  <button class="filter-btn" data-filter="EUR/CAD">EUR/CAD</button>
-  <button class="filter-btn" data-filter="CHF/JPY">CHF/JPY</button>
-  <button class="filter-btn" data-filter="USD/BRL">USD/BRL</button>
-  <button class="filter-btn" data-filter="EUR/USD">EUR/USD</button>
-  <button class="filter-btn" data-filter="EUR/GBP">EUR/GBP</button>
-  <button class="filter-btn" data-filter="GBP/CAD">GBP/CAD</button>
-  <button class="filter-btn" data-filter="CAD/JPY">CAD/JPY</button>
-  <button class="filter-btn" data-filter="AUD/CAD">AUD/CAD</button>
-</div>
-
-<div class="container">
-
-<div class="section-title"><h2>⏱ Trades com Expiry 5s (Padrão)</h2><div class="sub">A maioria usa 5 segundos — scalping puro</div></div>
-<div class="trade-grid" id="grid5s"></div>
-
-<div class="section-title"><h2>⏱ Trades com Expiry Diferente (10s / 30s / 1min / 2min)</h2><div class="sub">Exceções que provam a regra — expiry maior para pares específicos</div></div>
-<div class="trade-grid" id="gridOther"></div>
-
-<div class="section-title"><h2>📊 Análise por Par</h2><div class="sub">Distribuição dos 29 trades únicos entre os pares operados</div></div>
-<div class="trade-grid" id="gridStats"></div>
-
-</div>
-
-<footer class="footer">
-  <p><strong>Day Trader Success</strong> · 29 trades únicos de 55 prints · Quotex OTC · M1 · Expiry 5s/10s/30s/1min/2min</p>
-  <p style="margin-top:4px;opacity:.6;">Dados extraídos e verificados por <strong>Athena</strong> (Mind$un) · Junho 2026</p>
-</footer>
+<div id="app"></div>
 
 <script>
+// ====== TRADE DATA ======
 const trades = [
-  {id:1, pair:"GBP/JPY", entry:"215.115", close:"215.159", profit:28.95, currency:"R$", payout:93, expiry:"5s", dir:"CALL", pattern:"Martelo", support:"215.100", time:"23:41:40", iphone:"00:41", img:"6,60", candles:[{b:true,o:72,c:62,h:76,l:58},{b:false,o:62,c:52,h:66,l:48},{b:false,o:52,c:42,h:56,l:38},{b:false,o:42,c:32,h:48,l:22},{b:true,o:26,c:32,h:36,l:18},{b:true,o:32,c:40,h:44,l:30},{b:true,o:40,c:48,h:52,l:38},{b:true,o:48,c:56,h:60,l:46},{b:true,o:56,c:66,h:70,l:54},{b:true,o:66,c:74,h:78,l:64},{b:false,o:74,c:70,h:78,l:68},{b:true,o:70,c:72,h:76,l:68}],prices:["215.500","215.400","215.300","215.200","215.100"],times:["23:20","23:28","23:36","23:44","23:52"],entryY:18,grid:[0,20,40,60,80,100]},
-  {id:2, pair:"NZD/CHF", entry:"0.46205", close:"0.46230+", profit:67.55, currency:"R$", payout:93, expiry:"5s", dir:"CALL", pattern:"Martelo", support:"0.46180", time:"23:36:11", iphone:"00:36", img:"7,58,59", candles:[{b:true,o:48,c:56,h:60,l:44},{b:false,o:56,c:48,h:60,l:44},{b:false,o:48,c:40,h:52,l:36},{b:false,o:40,c:32,h:44,l:26},{b:true,o:30,c:38,h:42,l:24},{b:true,o:38,c:46,h:50,l:36},{b:true,o:46,c:52,h:56,l:44},{b:true,o:52,c:62,h:66,l:50},{b:false,o:62,c:58,h:66,l:56},{b:true,o:58,c:64,h:68,l:56}],prices:["0.46300","0.46250","0.46200","0.46150","0.46100"],times:["23:20","23:28","23:36","23:44","23:52"],entryY:30,grid:[0,25,50,75,100]},
-  {id:3, pair:"USD/PHP", entry:"60.182", close:"60.275", profit:19.20, currency:"R$", payout:92, expiry:"2min", dir:"CALL", pattern:"Reversão", support:"60.150", time:"23:33:36", iphone:"00:33", img:"8,9", candles:[{b:false,o:70,c:58,h:74,l:52},{b:false,o:58,c:48,h:62,l:42},{b:true,o:46,c:52,h:56,l:40},{b:true,o:52,c:60,h:64,l:48},{b:false,o:60,c:52,h:64,l:46},{b:true,o:50,c:58,h:62,l:44},{b:true,o:58,c:68,h:72,l:56},{b:true,o:68,c:76,h:80,l:66}],prices:["60.300","60.250","60.200","60.150","60.100"],times:["23:20","23:28","23:36","23:44","23:52"],entryY:22,grid:[0,25,50,75,100]},
-  {id:4, pair:"CAD/CHF", entry:"0.55748", close:"0.55772", profit:96.50, currency:"R$", payout:93, expiry:"10s", dir:"CALL", pattern:"Fundo Triplo", support:"0.55750", time:"21:21:45", iphone:"22:21", img:"10", candles:[{b:false,o:80,c:64,h:84,l:58},{b:true,o:64,c:70,h:74,l:60},{b:false,o:70,c:52,h:74,l:44},{b:true,o:52,c:60,h:64,l:48},{b:false,o:60,c:48,h:64,l:40},{b:true,o:46,c:52,h:56,l:38},{b:false,o:52,c:46,h:56,l:38},{b:true,o:44,c:50,h:54,l:36},{b:true,o:50,c:58,h:62,l:48},{b:true,o:58,c:68,h:72,l:56}],prices:["0.55950","0.55850","0.55750","0.55650","0.55550"],times:["21:04","21:12","21:20","21:28","21:36"],entryY:20,grid:[0,25,50,75,100]},
-  {id:5, pair:"AUD/CHF", entry:"0.55215", close:"0.55250+", profit:97.00, currency:"R$", payout:94, expiry:"1min", dir:"CALL", pattern:"Momentum", support:"0.55180", time:"16:32", iphone:"17:32", img:"11", candles:[{b:false,o:60,c:48,h:64,l:42},{b:false,o:48,c:40,h:52,l:34},{b:true,o:38,c:44,h:48,l:32},{b:true,o:44,c:52,h:56,l:40},{b:true,o:52,c:60,h:64,l:50},{b:false,o:60,c:56,h:64,l:52},{b:true,o:56,c:64,h:68,l:54},{b:true,o:64,c:72,h:76,l:62}],prices:["0.55300","0.55250","0.55200","0.55150","0.55100"],times:["16:16","16:24","16:32","16:40","16:48"],entryY:40,grid:[0,25,50,75,100]},
-  {id:6, pair:"GBP/NZD", entry:"1.93170", close:"1.93421", profit:267.40, currency:"R$", payout:91, expiry:"5s", dir:"CALL", pattern:"Tsunami", support:"1.93170", time:"15:20", iphone:"16:20", img:"12,13", candles:[{b:true,o:50,c:62,h:68,l:46},{b:false,o:62,c:48,h:66,l:42},{b:false,o:48,c:36,h:52,l:30},{b:false,o:36,c:24,h:40,l:18},{b:false,o:24,c:14,h:28,l:8},{b:false,o:14,c:6,h:18,l:0},{b:true,o:4,c:12,h:16,l:0},{b:true,o:12,c:26,h:30,l:10},{b:true,o:26,c:42,h:46,l:24},{b:true,o:42,c:56,h:60,l:40},{b:false,o:56,c:48,h:60,l:44},{b:true,o:48,c:54,h:58,l:46}],prices:["1.94000","1.93800","1.93600","1.93400","1.93200"],times:["15:04","15:12","15:20","15:28","15:36"],entryY:6,grid:[0,17,34,50,67,84,100]},
-  {id:7, pair:"USD/ARS", entry:"1487.76", close:"1487.50-", profit:345.60, currency:"R$", payout:92, expiry:"5s", dir:"PUT", pattern:"Queda Forte", support:"1487.50", time:"21:25", iphone:"22:25", img:"13", candles:[{b:true,o:70,c:80,h:84,l:66},{b:true,o:80,c:88,h:92,l:78},{b:false,o:88,c:72,h:92,l:66},{b:false,o:72,c:58,h:76,l:50},{b:false,o:58,c:44,h:62,l:36},{b:false,o:44,c:32,h:48,l:26},{b:true,o:30,c:36,h:40,l:24},{b:false,o:36,c:24,h:40,l:18},{b:false,o:24,c:14,h:28,l:10}],prices:["1490.00","1489.00","1488.00","1487.50","1487.00"],times:["21:12","21:20","21:28","21:36","21:44"],entryY:16,grid:[0,25,50,75,100]},
-  {id:8, pair:"EUR/CAD", entry:"1.61335", close:"1.61331", profit:11.52, currency:"€", payout:92, expiry:"5s", dir:"PUT", pattern:"Topo Duplo", resistance:"1.61400", time:"12:30:49", iphone:"13:30", img:"14,15", candles:[{b:true,o:20,c:32,h:36,l:16},{b:true,o:32,c:46,h:50,l:28},{b:false,o:46,c:44,h:50,l:40},{b:false,o:44,c:34,h:48,l:28},{b:false,o:34,c:24,h:38,l:18},{b:false,o:24,c:14,h:28,l:8},{b:true,o:12,c:20,h:24,l:8},{b:true,o:20,c:30,h:34,l:16},{b:true,o:30,c:40,h:44,l:28},{b:false,o:40,c:36,h:44,l:32}],prices:["1.61500","1.61400","1.61300","1.61200","1.61100"],times:["12:16","12:24","12:32","12:40","12:48"],entryY:24,grid:[0,20,40,60,80,100]},
-  {id:9, pair:"CHF/JPY", entry:"199.480", close:"199.486", profit:5.79, currency:"€", payout:93, expiry:"5s", dir:"CALL", pattern:"Martelo", support:"199.450", time:"12:24:25", iphone:"13:24", img:"16", candles:[{b:true,o:42,c:50,h:54,l:38},{b:false,o:50,c:42,h:54,l:36},{b:false,o:42,c:34,h:46,l:28},{b:true,o:32,c:38,h:42,l:26},{b:true,o:38,c:44,h:48,l:34},{b:false,o:44,c:38,h:48,l:32},{b:true,o:36,c:44,h:48,l:30},{b:true,o:44,c:50,h:54,l:42}],prices:["199.550","199.500","199.450","199.400","199.350"],times:["12:12","12:20","12:28","12:36","12:44"],entryY:34,grid:[0,25,50,75,100]},
-  {id:10, pair:"CHF/JPY", entry:"199.556", close:"199.560", profit:0.93, currency:"€", payout:93, expiry:"5s", dir:"PUT", pattern:"Rejeição", resistance:"199.560", time:"12:24:30", iphone:"13:24", img:"17", candles:[{b:true,o:36,c:44,h:48,l:32},{b:true,o:44,c:52,h:56,l:40},{b:false,o:52,c:44,h:56,l:38},{b:false,o:44,c:36,h:48,l:30},{b:true,o:34,c:42,h:46,l:28},{b:false,o:42,c:34,h:46,l:28},{b:true,o:32,c:40,h:44,l:26},{b:false,o:40,c:32,h:44,l:26}],prices:["199.600","199.550","199.500","199.450","199.400"],times:["12:12","12:20","12:28","12:36","12:44"],entryY:50,grid:[0,25,50,75,100]},
-  {id:11, pair:"USD/BRL", entry:"0.19142", close:"0.19144+", profit:17.37, currency:"€", payout:93, expiry:"5s", dir:"CALL", pattern:"Martelo Suave", support:"0.19120", time:"12:34", iphone:"13:34", img:"18,19,20,21", candles:[{b:true,o:28,c:36,h:40,l:24},{b:false,o:36,c:28,h:40,l:22},{b:false,o:28,c:22,h:32,l:16},{b:false,o:22,c:16,h:26,l:10},{b:true,o:14,c:20,h:24,l:8},{b:true,o:20,c:26,h:30,l:16},{b:false,o:26,c:20,h:30,l:14},{b:true,o:20,c:28,h:32,l:18},{b:true,o:28,c:36,h:40,l:26},{b:true,o:36,c:44,h:48,l:34}],prices:["0.19200","0.19180","0.19160","0.19140","0.19120"],times:["12:16","12:24","12:32","12:40","12:48"],entryY:18,grid:[0,20,40,60,80,100]},
-  {id:12, pair:"EUR/CAD", entry:"1.61232", close:"1.61248", profit:9.60, currency:"€", payout:92, expiry:"5s", dir:"CALL", pattern:"Martelo", support:"1.61200", time:"12:40:42", iphone:"13:40", img:"22,23", candles:[{b:true,o:20,c:30,h:34,l:16},{b:false,o:30,c:22,h:34,l:16},{b:false,o:22,c:14,h:26,l:8},{b:true,o:12,c:20,h:24,l:6},{b:true,o:20,c:28,h:32,l:16},{b:false,o:28,c:22,h:32,l:16},{b:true,o:20,c:30,h:34,l:16},{b:true,o:30,c:40,h:44,l:28}],prices:["1.61300","1.61250","1.61200","1.61150","1.61100"],times:["12:24","12:32","12:40","12:48","12:56"],entryY:20,grid:[0,25,50,75,100]},
-  {id:13, pair:"EUR/USD", entry:"1.17306", close:"1.17315", profit:7.68, currency:"€", payout:92, expiry:"5s", dir:"CALL", pattern:"Pullback", support:"1.17280", time:"12:44", iphone:"13:44", img:"24,25", candles:[{b:true,o:10,c:20,h:24,l:6},{b:true,o:20,c:32,h:36,l:16},{b:true,o:32,c:44,h:48,l:28},{b:false,o:44,c:36,h:48,l:30},{b:false,o:36,c:26,h:40,l:20},{b:false,o:26,c:18,h:30,l:12},{b:true,o:16,c:24,h:28,l:10},{b:true,o:24,c:34,h:38,l:20},{b:true,o:34,c:46,h:50,l:32},{b:true,o:46,c:54,h:58,l:44}],prices:["1.17400","1.17350","1.17300","1.17250","1.17200"],times:["12:24","12:32","12:40","12:48","12:56"],entryY:24,grid:[0,20,40,60,80,100]},
-  {id:14, pair:"EUR/GBP", entry:"0.86853", close:"0.86882", profit:0.95, currency:"€", payout:95, expiry:"5s", dir:"CALL", pattern:"Consolidação", support:"0.86800", time:"12:47", iphone:"13:47", img:"26,27,28,29,30", candles:[{b:false,o:60,c:50,h:64,l:44},{b:true,o:48,c:54,h:58,l:42},{b:false,o:54,c:46,h:58,l:40},{b:true,o:44,c:52,h:56,l:38},{b:false,o:52,c:44,h:56,l:38},{b:true,o:42,c:50,h:54,l:36},{b:true,o:50,c:58,h:62,l:46},{b:true,o:58,c:66,h:70,l:56},{b:false,o:66,c:60,h:70,l:56}],prices:["0.86950","0.86900","0.86850","0.86800","0.86750"],times:["12:32","12:40","12:48","12:56","13:04"],entryY:44,grid:[0,25,50,75,100]},
-  {id:15, pair:"EUR/GBP", entry:"0.86811", close:"0.86817", profit:3.86, currency:"€", payout:93, expiry:"5s", dir:"PUT", pattern:"Queda Rápida", resistance:"0.86830", time:"13:26", iphone:"14:26", img:"32", candles:[{b:true,o:20,c:30,h:34,l:16},{b:true,o:30,c:42,h:46,l:26},{b:false,o:42,c:32,h:46,l:26},{b:false,o:32,c:22,h:36,l:16},{b:true,o:20,c:28,h:32,l:14},{b:false,o:28,c:18,h:32,l:12}],prices:["0.86900","0.86850","0.86800","0.86750","0.86700"],times:["13:12","13:20","13:28","13:36","13:44"],entryY:30,grid:[0,25,50,75,100]},
-  {id:16, pair:"EUR/GBP", entry:"0.86749", close:"0.86820", profit:46.32, currency:"€", payout:93, expiry:"2min", dir:"CALL", pattern:"Reversão Longa", support:"0.86730", time:"13:50", iphone:"14:50", img:"33", candles:[{b:false,o:60,c:48,h:64,l:42},{b:false,o:48,c:36,h:52,l:30},{b:false,o:36,c:26,h:40,l:20},{b:true,o:24,c:32,h:36,l:18},{b:true,o:32,c:42,h:46,l:28},{b:true,o:42,c:52,h:56,l:38},{b:true,o:52,c:60,h:64,l:48},{b:true,o:60,c:68,h:72,l:58}],prices:["0.86900","0.86850","0.86800","0.86750","0.86700"],times:["13:36","13:44","13:52","14:00","14:08"],entryY:12,grid:[0,20,40,60,80,100]},
-  {id:17, pair:"USD/ARS", entry:"1494.00", close:"1494.20+", profit:7.76, currency:"€", payout:94, expiry:"5s", dir:"CALL", pattern:"Suporte Psicológico", support:"1494.00", time:"13:52", iphone:"14:52", img:"34", candles:[{b:false,o:70,c:56,h:74,l:50},{b:false,o:56,c:44,h:60,l:38},{b:true,o:42,c:50,h:54,l:36},{b:true,o:50,c:58,h:62,l:46},{b:false,o:58,c:50,h:62,l:44},{b:true,o:48,c:58,h:62,l:42},{b:true,o:58,c:68,h:72,l:56}],prices:["1495.00","1494.50","1494.00","1493.50","1493.00"],times:["13:36","13:44","13:52","14:00","14:08"],entryY:26,grid:[0,25,50,75,100]},
-  {id:18, pair:"USD/ARS", entry:"1494.25", close:"1494.58", profit:3.84, currency:"€", payout:92, expiry:"30s", dir:"CALL", pattern:"Rompimento", support:"1494.00", time:"14:04", iphone:"15:04", img:"35", candles:[{b:false,o:60,c:48,h:64,l:42},{b:false,o:48,c:36,h:52,l:30},{b:false,o:36,c:26,h:40,l:20},{b:true,o:24,c:32,h:36,l:18},{b:false,o:32,c:22,h:36,l:16},{b:true,o:20,c:30,h:34,l:14},{b:true,o:30,c:40,h:44,l:26},{b:true,o:40,c:52,h:56,l:38},{b:true,o:52,c:62,h:66,l:50}],prices:["1495.00","1494.50","1494.00","1493.50","1493.00"],times:["14:04","14:12","14:20","14:28","14:36"],entryY:22,grid:[0,20,40,60,80,100]},
-  {id:19, pair:"USD/ARS", entry:"1494.94", close:"1495.20+", profit:23.28, currency:"€", payout:94, expiry:"10s", dir:"CALL", pattern:"Momentum Alta", resistance:"1495.00", time:"13:54", iphone:"14:54", img:"36", candles:[{b:true,o:40,c:50,h:54,l:36},{b:true,o:50,c:62,h:66,l:46},{b:false,o:62,c:54,h:66,l:48},{b:true,o:52,c:62,h:66,l:48},{b:true,o:62,c:72,h:76,l:58},{b:true,o:72,c:82,h:86,l:70}],prices:["1496.00","1495.50","1495.00","1494.50","1494.00"],times:["13:44","13:52","14:00","14:08","14:16"],entryY:48,grid:[0,25,50,75,100]},
-  {id:20, pair:"USD/BRL", entry:"0.19637", close:"0.19650+", profit:9.65, currency:"R$", payout:93, expiry:"5s", dir:"CALL", pattern:"Suporte", support:"0.19630", time:"23:14", iphone:"00:14", img:"48", candles:[{b:false,o:60,c:50,h:64,l:44},{b:false,o:50,c:42,h:54,l:36},{b:true,o:40,c:48,h:52,l:34},{b:true,o:48,c:56,h:60,l:44},{b:true,o:56,c:64,h:68,l:54}],prices:["0.19700","0.19650","0.19600","0.19550","0.19500"],times:["23:04","23:12","23:20","23:28","23:36"],entryY:36,grid:[0,25,50,75,100]},
-  {id:21, pair:"USD/PHP", entry:"60.250", close:"60.275", profit:19.20, currency:"R$", payout:80, expiry:"5s", dir:"CALL", pattern:"Rompimento", resistance:"60.250", time:"23:33:36", iphone:"00:33", img:"56,57", candles:[{b:true,o:40,c:48,h:52,l:36},{b:true,o:48,c:56,h:60,l:44},{b:false,o:56,c:48,h:60,l:42},{b:true,o:46,c:54,h:58,l:40},{b:true,o:54,c:62,h:66,l:52}],prices:["60.300","60.250","60.200","60.150","60.100"],times:["23:20","23:28","23:36","23:44","23:52"],entryY:40,grid:[0,25,50,75,100]},
-  {id:22, pair:"CAD/JPY", entry:"115.852", close:"115.909", profit:38.60, currency:"R$", payout:94, expiry:"5s", dir:"CALL", pattern:"Momentum", support:"115.800", time:"21:30:16", iphone:"22:30", img:"42,43,44,47", candles:[{b:true,o:40,c:50,h:54,l:36},{b:true,o:50,c:58,h:62,l:46},{b:false,o:58,c:50,h:62,l:44},{b:true,o:48,c:56,h:60,l:42},{b:true,o:56,c:64,h:68,l:52},{b:true,o:64,c:72,h:76,l:62}],prices:["116.000","115.900","115.800","115.700","115.600"],times:["21:12","21:20","21:28","21:36","21:44"],entryY:40,grid:[0,25,50,75,100]},
-  {id:23, pair:"CAD/JPY", entry:"115.846", close:"115.890+", profit:58.50, currency:"R$", payout:95, expiry:"5s", dir:"CALL", pattern:"Marubozu", support:"115.800", time:"21:32", iphone:"22:32", img:"46", candles:[{b:true,o:36,c:46,h:50,l:32},{b:true,o:46,c:56,h:60,l:42},{b:false,o:56,c:50,h:60,l:44},{b:true,o:48,c:58,h:62,l:42},{b:true,o:58,c:68,h:72,l:56}],prices:["116.000","115.900","115.800","115.700","115.600"],times:["21:20","21:28","21:36","21:44","21:52"],entryY:36,grid:[0,25,50,75,100]},
-  {id:24, pair:"CAD/JPY", entry:"115.899", close:"115.920", profit:87.30, currency:"R$", payout:94, expiry:"5s", dir:"CALL", pattern:"Rompimento", resistance:"115.900", time:"21:30:48", iphone:"22:30", img:"45", candles:[{b:true,o:36,c:46,h:50,l:32},{b:true,o:46,c:56,h:60,l:42},{b:false,o:56,c:50,h:60,l:44},{b:true,o:48,c:58,h:62,l:42},{b:true,o:58,c:68,h:72,l:56}],prices:["116.000","115.900","115.800","115.700","115.600"],times:["21:20","21:28","21:36","21:44","21:52"],entryY:48,grid:[0,25,50,75,100]},
-  {id:25, pair:"AUD/CAD", entry:"0.96262", close:"0.96292", profit:19.20, currency:"R$", payout:92, expiry:"5s", dir:"CALL", pattern:"Marubozu", support:"0.96200", time:"23:25", iphone:"00:25", img:"49,50,51", candles:[{b:false,o:60,c:50,h:64,l:44},{b:false,o:50,c:42,h:54,l:36},{b:true,o:40,c:48,h:52,l:34},{b:true,o:48,c:56,h:60,l:44},{b:true,o:56,c:66,h:70,l:52}],prices:["0.96300","0.96250","0.96200","0.96150","0.96100"],times:["23:12","23:20","23:28","23:36","23:44"],entryY:46,grid:[0,25,50,75,100]},
-  {id:26, pair:"USD/BRL", entry:"0.19725", close:"0.19735+", profit:5.00, currency:"R$", payout:94, expiry:"5s", dir:"CALL", pattern:"Continuidade", support:"0.19700", time:"23:27", iphone:"00:27", img:"52,53", candles:[{b:true,o:20,c:30,h:34,l:16},{b:false,o:30,c:24,h:34,l:18},{b:true,o:22,c:30,h:34,l:16},{b:true,o:30,c:38,h:42,l:26}],prices:["0.19750","0.19725","0.19700","0.19675","0.19650"],times:["23:16","23:24","23:32","23:40","23:48"],entryY:42,grid:[0,25,50,75,100]},
-  {id:27, pair:"USD/BRL", entry:"0.19724", close:"0.19740+", profit:19.40, currency:"R$", payout:94, expiry:"5s", dir:"CALL", pattern:"Rompeu Resistência", resistance:"0.19725", time:"23:29:47", iphone:"00:29", img:"54,55", candles:[{b:true,o:20,c:30,h:34,l:16},{b:true,o:30,c:40,h:44,l:26},{b:false,o:40,c:34,h:44,l:28},{b:true,o:32,c:42,h:46,l:28},{b:true,o:42,c:52,h:56,l:40}],prices:["0.19750","0.19725","0.19700","0.19675","0.19650"],times:["23:16","23:24","23:32","23:40","23:48"],entryY:36,grid:[0,25,50,75,100]},
-  {id:28, pair:"GBP/CAD", entry:"1.82998", close:"—", profit:0.93, currency:"€", payout:93, expiry:"5s", dir:"—", pattern:"Setup apenas", support:"1.82950", time:"12:56", iphone:"13:56", img:"31", candles:[{b:true,o:30,c:40,h:44,l:26},{b:true,o:40,c:50,h:54,l:36},{b:true,o:50,c:60,h:64,l:46},{b:false,o:60,c:54,h:64,l:48}],prices:["1.83100","1.83050","1.83000","1.82950","1.82900"],times:["12:44","12:52","13:00","13:08","13:16"],entryY:44,grid:[0,25,50,75,100]},
-  {id:29, pair:"NZD/CHF", entry:"0.45095", close:"0.45106+", profit:9.30, currency:"R$", payout:93, expiry:"5s", dir:"CALL", pattern:"Martelo", support:"0.45080", time:"21:26", iphone:"22:26", img:"37,38,39,40,41", candles:[{b:false,o:50,c:40,h:54,l:34},{b:false,o:40,c:32,h:44,l:26},{b:true,o:30,c:38,h:42,l:24},{b:true,o:38,c:46,h:50,l:34},{b:true,o:46,c:54,h:58,l:44}],prices:["0.45200","0.45150","0.45100","0.45050","0.45000"],times:["21:12","21:20","21:28","21:36","21:44"],entryY:36,grid:[0,25,50,75,100]}
+  {id:0,pair:"GBP/JPY OTC",img:"6,60",entry:215.115,close:215.159,profit:28.95,cur:"R$",pct:93,exp:"5s",dir:"CALL",sup:215.100,pattern:"🔨 Martelo",time:"23:41:40",iphone:"00:41",prices:[215.500,215.400,215.300,215.200,215.100],times:["23:20","23:28","23:36","23:44","23:52"],entryY:.82,candles:[
+      {o:72,c:62,h:76,l:56},{o:62,c:52,h:66,l:46},{o:52,c:42,h:56,l:38},{o:42,c:32,h:48,l:22},{o:26,c:32,h:36,l:16},{o:32,c:40,h:44,l:28},{o:40,c:48,h:52,l:36},{o:48,c:56,h:60,l:44},{o:56,c:66,h:70,l:52},{o:66,c:74,h:78,l:62},{o:74,c:70,h:78,l:66},{o:70,c:72,h:76,l:66}],ann:[{t:"🔴🔴🔴 3 velas vermelhas",x:.2,y:.82,c:"red"},{t:"🔨 Martelo!",x:.4,y:.55,c:"green"},{t:"✅ CALL",x:.6,y:.65,c:"green"}]},
+  {id:1,pair:"NZD/CHF OTC",img:"7,58,59",entry:.46205,close:.46230,profit:67.55,cur:"R$",pct:93,exp:"5s",dir:"CALL",sup:.46180,pattern:"🔨 Martelo",time:"23:36:11",iphone:"00:36",prices:[.46300,.46250,.46200,.46150,.46100],times:["23:20","23:28","23:36","23:44","23:52"],entryY:.68,candles:[
+      {o:70,c:80,h:84,l:64},{o:80,c:70,h:84,l:62},{o:70,c:58,h:74,l:50},{o:58,c:48,h:62,l:40},{o:46,c:54,h:58,l:38},{o:54,c:64,h:68,l:50},{o:64,c:74,h:78,l:60},{o:74,c:80,h:84,l:70},{o:80,c:76,h:84,l:72},{o:76,c:82,h:86,l:74}],ann:[{t:"Queda de 3 velas 🔴",x:.25,y:.72,c:"red"},{t:"🔨 Martelo reversão",x:.55,y:.55,c:"green"},{t:"✅ CALL +R$67,55",x:.75,y:.58,c:"green"}]},
+  {id:2,pair:"USD/PHP OTC",img:"8,9",entry:60.182,close:60.275,profit:19.20,cur:"R$",pct:92,exp:"2min",dir:"CALL",sup:60.150,pattern:"Reversão Longa",time:"23:33:36",iphone:"00:33",prices:[60.300,60.250,60.200,60.150,60.100],times:["23:20","23:28","23:36","23:44","23:52"],entryY:.36,candles:[
+      {o:70,c:58,h:74,l:50},{o:58,c:48,h:62,l:40},{o:46,c:52,h:56,l:38},{o:52,c:60,h:64,l:46},{o:60,c:52,h:64,l:44},{o:50,c:58,h:62,l:42},{o:58,c:68,h:72,l:54},{o:68,c:76,h:80,l:64}],ann:[{t:"Fundo duplo",x:.25,y:.62,c:"blue"},{t:"⏱ 2min expiry",x:.7,y:.75,c:"gold"}]},
+  {id:3,pair:"CAD/CHF OTC",img:"10",entry:.55748,close:.55772,profit:96.50,cur:"R$",pct:93,exp:"10s",dir:"CALL",sup:.55750,pattern:"Fundo Triplo",time:"21:21:45",iphone:"22:21",prices:[.55950,.55850,.55750,.55650,.55550],times:["21:04","21:12","21:20","21:28","21:36"],entryY:.70,candles:[
+      {o:80,c:64,h:84,l:56},{o:64,c:70,h:74,l:58},{o:70,c:52,h:74,l:42},{o:52,c:60,h:64,l:46},{o:60,c:48,h:64,l:38},{o:46,c:52,h:56,l:36},{o:52,c:46,h:56,l:36},{o:44,c:50,h:54,l:34},{o:50,c:58,h:62,l:46},{o:58,c:68,h:72,l:54}],ann:[{t:"Fundo 1",x:.2,y:.72,c:"blue"},{t:"Fundo 2",x:.35,y:.72,c:"blue"},{t:"Fundo 3 🎯",x:.5,y:.72,c:"blue"},{t:"⏱ 10s!",x:.7,y:.45,c:"blue"}]},
+  {id:4,pair:"AUD/CHF OTC",img:"11",entry:.55215,close:.55250,profit:97.00,cur:"R$",pct:94,exp:"1min",dir:"CALL",sup:.55180,pattern:"Momentum",time:"16:32",iphone:"17:32",prices:[.55300,.55250,.55200,.55150,.55100],times:["16:16","16:24","16:32","16:40","16:48"],entryY:.52,candles:[
+      {o:60,c:48,h:64,l:40},{o:48,c:40,h:52,l:32},{o:38,c:44,h:48,l:30},{o:44,c:52,h:56,l:38},{o:52,c:60,h:64,l:48},{o:60,c:56,h:64,l:50},{o:56,c:64,h:68,l:52},{o:64,c:72,h:76,l:60}],ann:[{t:"3 velas vermelhas 🔴",x:.2,y:.58,c:"red"},{t:"✅ Momentum CALL",x:.65,y:.50,c:"green"}]},
+  {id:5,pair:"GBP/NZD OTC",img:"12,13",entry:1.93170,close:1.93421,profit:267.40,cur:"R$",pct:91,exp:"5s",dir:"CALL",sup:1.93170,pattern:"🌊 Tsunami",time:"15:20",iphone:"16:20",prices:[1.9400,1.9380,1.9360,1.9340,1.9320],times:["15:04","15:12","15:20","15:28","15:36"],entryY:.16,candles:[
+      {o:50,c:62,h:68,l:44},{o:62,c:48,h:66,l:40},{o:48,c:36,h:52,l:28},{o:36,c:24,h:40,l:16},{o:24,c:14,h:28,l:6},{o:14,c:6,h:18,l:0},{o:4,c:12,h:16,l:0},{o:12,c:26,h:30,l:8},{o:26,c:42,h:46,l:22},{o:42,c:56,h:60,l:38},{o:56,c:48,h:60,l:42},{o:48,c:54,h:58,l:44}],ann:[{t:"🔴🔴🔴🔴🔴 5 vermelhas!",x:.3,y:.32,c:"red"},{t:"🔨 + ENTRADA",x:.45,y:.06,c:"green"},{t:"🚀 +R$267,40!",x:.65,y:.30,c:"green"}]},
+  {id:6,pair:"USD/ARS OTC",img:"13",entry:1487.76,close:1487.50,profit:345.60,cur:"R$",pct:92,exp:"5s",dir:"PUT",sup:1487.50,pattern:"Queda Forte",time:"21:25",iphone:"22:25",prices:[1490.0,1489.0,1488.0,1487.5,1487.0],times:["21:12","21:20","21:28","21:36","21:44"],entryY:.30,candles:[
+      {o:70,c:80,h:84,l:64},{o:80,c:88,h:92,l:76},{o:88,c:72,h:92,l:64},{o:72,c:58,h:76,l:48},{o:58,c:44,h:62,l:34},{o:44,c:32,h:48,l:24},{o:30,c:36,h:40,l:22},{o:36,c:24,h:40,l:16},{o:24,c:14,h:28,l:8}],ann:[{t:"🔴 PUT +R$345,60!",x:.4,y:.45,c:"red"},{t:"Maior lucro! 🏆",x:.65,y:.55,c:"gold"}]},
+  {id:7,pair:"EUR/CAD OTC",img:"14,15",entry:1.61335,close:1.61331,profit:11.52,cur:"€",pct:92,exp:"5s",dir:"PUT",res:1.61400,pattern:"Topo Duplo",time:"12:30:49",iphone:"13:30",prices:[1.6150,1.6140,1.6130,1.6120,1.6110],times:["12:16","12:24","12:32","12:40","12:48"],entryY:.56,candles:[
+      {o:20,c:32,h:36,l:14},{o:32,c:46,h:50,l:26},{o:46,c:44,h:50,l:38},{o:44,c:34,h:48,l:26},{o:34,c:24,h:38,l:16},{o:24,c:14,h:28,l:6},{o:12,c:20,h:24,l:6},{o:20,c:30,h:34,l:14},{o:30,c:40,h:44,l:26},{o:40,c:36,h:44,l:30}],ann:[{t:"❌ Resistência 1.61400",x:.25,y:.30,c:"orange"},{t:"✅ PUT 5s",x:.6,y:.52,c:"red"}]},
+  {id:8,pair:"CHF/JPY OTC",img:"16",entry:199.480,close:199.486,profit:5.79,cur:"€",pct:93,exp:"5s",dir:"CALL",sup:199.450,pattern:"🔨 Martelo",time:"12:24:25",iphone:"13:24",prices:[199.55,199.50,199.45,199.40,199.35],times:["12:12","12:20","12:28","12:36","12:44"],entryY:.62,candles:[
+      {o:42,c:50,h:54,l:36},{o:50,c:42,h:54,l:34},{o:42,c:34,h:46,l:26},{o:32,c:38,h:42,l:24},{o:38,c:44,h:48,l:32},{o:44,c:38,h:48,l:30},{o:36,c:44,h:48,l:28},{o:44,c:50,h:54,l:40}],ann:[{t:"🔨 Martelo",x:.4,y:.68,c:"green"},{t:"✅ CALL 5s",x:.65,y:.55,c:"green"}]},
+  {id:9,pair:"CHF/JPY OTC",img:"17",entry:199.556,close:199.560,profit:.93,cur:"€",pct:93,exp:"5s",dir:"PUT",res:199.560,pattern:"Rejeição",time:"12:24:30",iphone:"13:24",prices:[199.60,199.55,199.50,199.45,199.40],times:["12:12","12:20","12:28","12:36","12:44"],entryY:.42,candles:[
+      {o:36,c:44,h:48,l:30},{o:44,c:52,h:56,l:38},{o:52,c:44,h:56,l:36},{o:44,c:36,h:48,l:28},{o:34,c:42,h:46,l:26},{o:42,c:34,h:46,l:26},{o:32,c:40,h:44,l:24},{o:40,c:32,h:44,l:24}],ann:[{t:"❌ Rejeitado",x:.3,y:.36,c:"orange"},{t:"✅ PUT",x:.6,y:.46,c:"red"}]},
+  {id:10,pair:"USD/BRL OTC",img:"18,19,20,21",entry:.19142,close:.19144,profit:17.37,cur:"€",pct:93,exp:"5s",dir:"CALL",sup:.19120,pattern:"🔨 Martelo",time:"12:34",iphone:"13:34",prices:[.19200,.19180,.19160,.19140,.19120],times:["12:16","12:24","12:32","12:40","12:48"],entryY:.58,candles:[
+      {o:28,c:36,h:40,l:22},{o:36,c:28,h:40,l:20},{o:28,c:22,h:32,l:14},{o:22,c:16,h:26,l:8},{o:14,c:20,h:24,l:6},{o:20,c:26,h:30,l:14},{o:26,c:20,h:30,l:12},{o:20,c:28,h:32,l:16},{o:28,c:36,h:40,l:24},{o:36,c:44,h:48,l:32}],ann:[{t:"🔴 3 vermelhas",x:.22,y:.70,c:"red"},{t:"🔨 Martelo em .19120",x:.42,y:.52,c:"green"},{t:"✅ CALL .19142",x:.6,y:.40,c:"green"}]},
+  {id:11,pair:"EUR/CAD OTC",img:"22,23",entry:1.61232,close:1.61248,profit:9.60,cur:"€",pct:92,exp:"5s",dir:"CALL",sup:1.61200,pattern:"🔨 Martelo",time:"12:40:42",iphone:"13:40",prices:[1.6130,1.6125,1.6120,1.6115,1.6110],times:["12:24","12:32","12:40","12:48","12:56"],entryY:.54,candles:[
+      {o:20,c:30,h:34,l:14},{o:30,c:22,h:34,l:14},{o:22,c:14,h:26,l:6},{o:12,c:20,h:24,l:4},{o:20,c:28,h:32,l:14},{o:28,c:22,h:32,l:14},{o:20,c:30,h:34,l:14},{o:30,c:40,h:44,l:26}],ann:[{t:"🔨 Martelo",x:.45,y:.56,c:"green"},{t:"✅ CALL 1.61232",x:.7,y:.46,c:"green"}]},
+  {id:12,pair:"EUR/USD OTC",img:"24,25",entry:1.17306,close:1.17315,profit:7.68,cur:"€",pct:92,exp:"5s",dir:"CALL",sup:1.17280,pattern:"📈 Pullback",time:"12:44",iphone:"13:44",prices:[1.1740,1.1735,1.1730,1.1725,1.1720],times:["12:24","12:32","12:40","12:48","12:56"],entryY:.48,candles:[
+      {o:10,c:20,h:24,l:4},{o:20,c:32,h:36,l:14},{o:32,c:44,h:48,l:26},{o:44,c:36,h:48,l:28},{o:36,c:26,h:40,l:18},{o:26,c:18,h:30,l:10},{o:16,c:24,h:28,l:8},{o:24,c:34,h:38,l:18},{o:34,c:46,h:50,l:30},{o:46,c:54,h:58,l:42}],ann:[{t:"🔴 Pullback de 4 velas",x:.35,y:.58,c:"red"},{t:"✅ CALL 1.17306",x:.65,y:.44,c:"green"}]},
+  {id:13,pair:"EUR/GBP OTC",img:"26,27,28,29,30",entry:.86853,close:.86882,profit:.95,cur:"€",pct:95,exp:"5s",dir:"CALL",sup:.86800,pattern:"📊 Consolidação",time:"12:47",iphone:"13:47",prices:[.86950,.86900,.86850,.86800,.86750],times:["12:32","12:40","12:48","12:56","13:04"],entryY:.42,candles:[
+      {o:60,c:50,h:64,l:42},{o:48,c:54,h:58,l:40},{o:54,c:46,h:58,l:38},{o:44,c:52,h:56,l:36},{o:52,c:44,h:56,l:36},{o:42,c:50,h:54,l:34},{o:50,c:58,h:62,l:44},{o:58,c:66,h:70,l:54},{o:66,c:60,h:70,l:54}],ann:[{t:"Zona de consolidação",x:.25,y:.55,c:"blue"},{t:"95% Payout!",x:.7,y:.34,c:"gold"}]},
+  {id:14,pair:"EUR/GBP OTC",img:"32",entry:.86811,close:.86817,profit:3.86,cur:"€",pct:93,exp:"5s",dir:"PUT",res:.86830,pattern:"Queda Rápida",time:"13:26",iphone:"14:26",prices:[.86900,.86850,.86800,.86750,.86700],times:["13:12","13:20","13:28","13:36","13:44"],entryY:.42,candles:[
+      {o:20,c:30,h:34,l:14},{o:30,c:42,h:46,l:24},{o:42,c:32,h:46,l:24},{o:32,c:22,h:36,l:14},{o:20,c:28,h:32,l:12},{o:28,c:18,h:32,l:10}],ann:[{t:"❌ Resistência .86830",x:.4,y:.36,c:"orange"},{t:"✅ PUT .86811",x:.65,y:.48,c:"red"}]},
+  {id:15,pair:"EUR/GBP OTC",img:"33",entry:.86749,close:.86820,profit:46.32,cur:"€",pct:93,exp:"2min",dir:"CALL",sup:.86730,pattern:"🔄 Reversão",time:"13:50",iphone:"14:50",prices:[.86900,.86850,.86800,.86750,.86700],times:["13:36","13:44","13:52","14:00","14:08"],entryY:.28,candles:[
+      {o:60,c:48,h:64,l:40},{o:48,c:36,h:52,l:28},{o:36,c:26,h:40,l:18},{o:24,c:32,h:36,l:16},{o:32,c:42,h:46,l:26},{o:42,c:52,h:56,l:36},{o:52,c:60,h:64,l:46},{o:60,c:68,h:72,l:56}],ann:[{t:"🔴 3 vermelhas",x:.25,y:.38,c:"red"},{t:"✅ CALL +€46,32",x:.65,y:.24,c:"green"}]},
+  {id:16,pair:"USD/ARS OTC",img:"34",entry:1494.00,close:1494.20,profit:7.76,cur:"€",pct:94,exp:"5s",dir:"CALL",sup:1494.00,pattern:"Suporte Psicológico",time:"13:52",iphone:"14:52",prices:[1495.0,1494.5,1494.0,1493.5,1493.0],times:["13:36","13:44","13:52","14:00","14:08"],entryY:.20,candles:[
+      {o:70,c:56,h:74,l:48},{o:56,c:44,h:60,l:36},{o:42,c:50,h:54,l:34},{o:50,c:58,h:62,l:44},{o:58,c:50,h:62,l:42},{o:48,c:58,h:62,l:40},{o:58,c:68,h:72,l:54}],ann:[{t:"Suporte 1494.00 🎯",x:.4,y:.16,c:"blue"},{t:"94% Payout!",x:.7,y:.34,c:"gold"}]},
+  {id:17,pair:"USD/ARS OTC",img:"35",entry:1494.25,close:1494.58,profit:3.84,cur:"€",pct:92,exp:"30s",dir:"CALL",sup:1494.00,pattern:"🌊 Rompimento",time:"14:04",iphone:"15:04",prices:[1495.0,1494.5,1494.0,1493.5,1493.0],times:["14:04","14:12","14:20","14:28","14:36"],entryY:.34,candles:[
+      {o:60,c:48,h:64,l:40},{o:48,c:36,h:52,l:28},{o:36,c:26,h:40,l:18},{o:24,c:32,h:36,l:16},{o:32,c:22,h:36,l:14},{o:20,c:30,h:34,l:12},{o:30,c:40,h:44,l:24},{o:40,c:52,h:56,l:36},{o:52,c:62,h:66,l:48}],ann:[{t:"⏱ 30s expiry!",x:.4,y:.48,c:"orange"},{t:"✅ CALL 1494.25",x:.7,y:.30,c:"green"}]},
+  {id:18,pair:"USD/ARS OTC",img:"36",entry:1494.94,close:1495.20,profit:23.28,cur:"€",pct:94,exp:"10s",dir:"CALL",res:1495.00,pattern:"⚡ Momentum",time:"13:54",iphone:"14:54",prices:[1496.0,1495.5,1495.0,1494.5,1494.0],times:["13:44","13:52","14:00","14:08","14:16"],entryY:.34,candles:[
+      {o:40,c:50,h:54,l:34},{o:50,c:62,h:66,l:44},{o:62,c:54,h:66,l:46},{o:52,c:62,h:66,l:46},{o:62,c:72,h:76,l:56},{o:72,c:82,h:86,l:68}],ann:[{t:"⏱ 10s expiry",x:.45,y:.50,c:"blue"},{t:"✅ CALL rompendo 1495",x:.7,y:.28,c:"green"}]},
+  {id:19,pair:"NZD/CHF OTC",img:"37,38,39,40,41",entry:.45095,close:.45106,profit:9.30,cur:"R$",pct:93,exp:"5s",dir:"CALL",sup:.45080,pattern:"🔨 Martelo",time:"21:26",iphone:"22:26",prices:[.45200,.45150,.45100,.45050,.45000],times:["21:12","21:20","21:28","21:36","21:44"],entryY:.48,candles:[
+      {o:50,c:40,h:54,l:32},{o:40,c:32,h:44,l:24},{o:30,c:38,h:42,l:22},{o:38,c:46,h:50,l:32},{o:46,c:54,h:58,l:42}],ann:[{t:"🔨 Martelo .45080",x:.35,y:.52,c:"green"},{t:"✅ CALL 5s",x:.65,y:.44,c:"green"}]},
+  {id:20,pair:"CAD/JPY OTC",img:"42,43,44,47",entry:115.852,close:115.909,profit:38.60,cur:"R$",pct:94,exp:"5s",dir:"CALL",sup:115.800,pattern:"⚡ Momentum",time:"21:30:16",iphone:"22:30",prices:[116.00,115.90,115.80,115.70,115.60],times:["21:12","21:20","21:28","21:36","21:44"],entryY:.44,candles:[
+      {o:40,c:50,h:54,l:34},{o:50,c:58,h:62,l:44},{o:58,c:50,h:62,l:42},{o:48,c:56,h:60,l:40},{o:56,c:64,h:68,l:50},{o:64,c:72,h:76,l:60}],ann:[{t:"3 velas verdes consecutivas 🟢🟢🟢",x:.35,y:.48,c:"green"},{t:"✅ CALL 115.852",x:.7,y:.36,c:"green"}]},
+  {id:21,pair:"CAD/JPY OTC",img:"46",entry:115.846,close:115.890,profit:58.50,cur:"R$",pct:95,exp:"5s",dir:"CALL",sup:115.800,pattern:"🌋 Marubozu",time:"21:32",iphone:"22:32",prices:[116.00,115.90,115.80,115.70,115.60],times:["21:20","21:28","21:36","21:44","21:52"],entryY:.40,candles:[
+      {o:36,c:46,h:50,l:30},{o:46,c:56,h:60,l:40},{o:56,c:50,h:60,l:42},{o:48,c:58,h:62,l:40},{o:58,c:68,h:72,l:54}],ann:[{t:"95% Payout!",x:.45,y:.34,c:"gold"},{t:"✅ CALL +R$58,50",x:.7,y:.36,c:"green"}]},
+  {id:22,pair:"CAD/JPY OTC",img:"45",entry:115.899,close:115.920,profit:87.30,cur:"R$",pct:94,exp:"5s",dir:"CALL",res:115.900,pattern:"Rompimento",time:"21:30:48",iphone:"22:30",prices:[116.00,115.90,115.80,115.70,115.60],times:["21:20","21:28","21:36","21:44","21:52"],entryY:.46,candles:[
+      {o:36,c:46,h:50,l:30},{o:46,c:56,h:60,l:40},{o:56,c:50,h:60,l:42},{o:48,c:58,h:62,l:40},{o:58,c:68,h:72,l:54}],ann:[{t:"Rompeu 115.900 🚀",x:.55,y:.42,c:"green"},{t:"+R$87,30!",x:.75,y:.56,c:"gold"}]},
+  {id:23,pair:"AUD/CAD OTC",img:"49,50,51",entry:.96262,close:.96292,profit:19.20,cur:"R$",pct:92,exp:"5s",dir:"CALL",sup:.96200,pattern:"🌋 Marubozu",time:"23:25",iphone:"00:25",prices:[.96300,.96250,.96200,.96150,.96100],times:["23:12","23:20","23:28","23:36","23:44"],entryY:.38,candles:[
+      {o:60,c:50,h:64,l:42},{o:50,c:42,h:54,l:34},{o:40,c:48,h:52,l:32},{o:48,c:56,h:60,l:42},{o:56,c:66,h:70,l:50}],ann:[{t:"🌋 Marubozu!",x:.55,y:.36,c:"purple"},{t:"✅ CALL .96262",x:.75,y:.46,c:"green"}]},
+  {id:24,pair:"USD/BRL OTC",img:"48",entry:.19637,close:.19650,profit:9.65,cur:"R$",pct:93,exp:"5s",dir:"CALL",sup:.19630,pattern:"Suporte",time:"23:14",iphone:"00:14",prices:[.19700,.19650,.19600,.19550,.19500],times:["23:04","23:12","23:20","23:28","23:36"],entryY:.38,candles:[
+      {o:60,c:50,h:64,l:42},{o:50,c:42,h:54,l:34},{o:40,c:48,h:52,l:32},{o:48,c:56,h:60,l:42},{o:56,c:64,h:68,l:52}],ann:[{t:"Suporte .19630",x:.4,y:.32,c:"blue"},{t:"✅ CALL 5s",x:.7,y:.46,c:"green"}]},
+  {id:25,pair:"USD/PHP OTC",img:"56,57",entry:60.250,close:60.275,profit:19.20,cur:"R$",pct:80,exp:"5s",dir:"CALL",res:60.250,pattern:"Rompimento",time:"23:33:36",iphone:"00:33",prices:[60.30,60.25,60.20,60.15,60.10],times:["23:20","23:28","23:36","23:44","23:52"],entryY:.38,candles:[
+      {o:40,c:48,h:52,l:34},{o:48,c:56,h:60,l:42},{o:56,c:48,h:60,l:40},{o:46,c:54,h:58,l:38},{o:54,c:62,h:66,l:50}],ann:[{t:"80% payout",x:.55,y:.46,c:"gold"},{t:"✅ CALL",x:.75,y:.32,c:"green"}]},
+  {id:26,pair:"USD/BRL OTC",img:"52,53",entry:.19725,close:.19735,profit:5.00,cur:"R$",pct:94,exp:"5s",dir:"CALL",sup:.19700,pattern:"Continuidade",time:"23:27",iphone:"00:27",prices:[.19750,.19725,.19700,.19675,.19650],times:["23:16","23:24","23:32","23:40","23:48"],entryY:.40,candles:[
+      {o:20,c:30,h:34,l:14},{o:30,c:24,h:34,l:16},{o:22,c:30,h:34,l:14},{o:30,c:38,h:42,l:24}],ann:[{t:"94% Payout!",x:.5,y:.36,c:"gold"},{t:"✅ CALL",x:.72,y:.46,c:"green"}]},
+  {id:27,pair:"USD/BRL OTC",img:"54,55",entry:.19724,close:.19740,profit:19.40,cur:"R$",pct:94,exp:"5s",dir:"CALL",res:.19725,pattern:"Rompimento",time:"23:29:47",iphone:"00:29",prices:[.19750,.19725,.19700,.19675,.19650],times:["23:16","23:24","23:32","23:40","23:48"],entryY:.36,candles:[
+      {o:20,c:30,h:34,l:14},{o:30,c:40,h:44,l:24},{o:40,c:34,h:44,l:26},{o:32,c:42,h:46,l:26},{o:42,c:52,h:56,l:38}],ann:[{t:"Rompeu .19725 🚀",x:.55,y:.32,c:"green"},{t:"+R$19,40",x:.72,y:.46,c:"gold"}]}
 ];
 
-function renderCandle(c, i, total, chartH, chartW) {
-  const w = (chartW - 12) / total;
-  const x = i * w + 6;
-  const range = 100;
-  const hRange = 24;
-  const o = c.o, cl = c.c, h = c.h, l = c.l;
-  const bodyTop = (range - Math.max(o, cl)) / range * hRange;
-  const bodyBot = (range - Math.min(o, cl)) / range * hRange;
-  const bodyH = Math.abs(bodyBot - bodyTop) || 1;
-  const highP = (range - h) / range * hRange;
-  const lowP = (range - l) / range * hRange;
-  const isBull = c.b;
-  return `<div class="mcandle ${isBull ? 'bull' : 'bear'}" style="left:${x}px;bottom:${Math.min(o,cl)/range*hRange}%;width:${w-2}px;height:${bodyH}%;min-height:1.5px;box-shadow:${isBull?'0 0 3px rgba(34,197,94,.3)':'0 0 2px rgba(239,68,68,.2)'}">
-    <div style="position:absolute;left:50%;bottom:100%;width:1.5px;height:${Math.abs(highP-bodyTop)}px;background:${isBull?'var(--green)':'var(--red)'};transform:translateX(-50%);border-radius:1px"></div>
-    <div style="position:absolute;left:50%;top:100%;width:1.5px;height:${Math.abs(lowP-bodyBot)}px;background:${isBull?'var(--green)':'var(--red)'};transform:translateX(-50%);border-radius:1px"></div>
-  </div>`;
-}
+// ====== RENDER ======
+let currentIdx = 0;
+let filtered = trades.map(t=>t.id);
 
-function renderMiniChart(t) {
-  const chartH = 100;
-  const numC = t.candles.length;
-  const chartW = Math.min(numC * 24, 340);
-  let candles = t.candles.map((c,i) => renderCandle(c, i, numC, chartH, chartW)).join('');
-  const supY = t.support ? parseInt(t.support.replace(/[^0-9]/,'')) % 100 / 100 * 24 : 0;
-  const entY = t.entryY;
-  return `<div class="mini-chart" style="height:${chartH}px">
-    <div class="mgrid">${[0,1,2,3,4].map(i=>`<div class="mhl" style="top:${i*25}%"></div>`).join('')}</div>
-    <div class="msupport" style="bottom:${t.candles[0]?Math.min(t.candles[0].o,t.candles[0].c)/100*24:15}%"></div>
-    ${candles}
-    <div class="mentry" style="bottom:${entY}%"><span style="position:absolute;right:2px;top:-8px;font-size:6px;color:var(--green);font-weight:700;font-family:JetBrains Mono,monospace">⬤</span></div>
-  </div>`;
-}
+function render(idx) {
+  const t = trades.find(t=>t.id===filtered[idx]);
+  if(!t) return;
+  currentIdx = idx;
 
-function renderCard(t) {
-  const profitStr = t.profit ? `<div class="amount win">+${t.currency}${t.profit}</div>` : `<div class="amount" style="color:var(--text3)">—</div>`;
-  const dirClass = t.dir === "PUT" ? "put" : "call";
-  const expClass = { "5s":"exp5","10s":"exp10","30s":"exp30","1min":"exp1m","2min":"exp2m" }[t.expiry] || "exp5";
-  const tags = `<span class="tg ${expClass}">⏱ ${t.expiry}</span><span class="tg ${dirClass}">${t.dir}</span><span class="tg otc">OTC</span><span class="tg payout">${t.payout}%</span>`;
-  const patternTag = t.pattern ? `<span class="tg pattern">${t.pattern}</span>` : '';
-  const imgTag = t.img ? `<span style="font-size:9px;color:var(--text3);font-family:JetBrains Mono,monospace">📷 img ${t.img}</span>` : '';
-  const isOther = ["10s","30s","1min","2min"].includes(t.expiry);
-  return `<div class="trade-card" data-pair="${t.pair}" data-expiry="${t.expiry}" data-other="${isOther}">
-    <div class="trade-card-header">
-      <div class="left">
-        <div class="pair">${t.pair}</div>
-        <div class="time"><span class="gmt">⏰ Gráfico: ${t.time}</span> · <span class="iphone">📱 iPhone: ${t.iphone}</span></div>
+  const expClass = { "5s":"tg5s","10s":"tg10s","30s":"tg30s","1min":"tg1m","2min":"tg2m" }[t.exp] || "tg5s";
+  const dirClass = t.dir==="PUT"?"tgput":"tgcall";
+  const dirIcon = t.dir==="PUT"?"🔴":"🟢";
+  const profitColor = t.dir==="PUT"?"":"";
+
+  let html = `
+  <div class="screen">
+    <div class="topbar">
+      <div class="pair">
+        <span>${t.pair}</span>
+        <span class="badge">M1</span>
       </div>
-      <div class="result">${profitStr}<div class="sub">@ ${t.entry}</div></div>
-    </div>
-    <div class="tags-line">${tags}${patternTag}</div>
-    ${renderMiniChart(t)}
-    <div class="trade-card-footer">
-      <div class="stat">${imgTag}</div>
-      <div class="stat"><strong>Entrada:</strong> ${t.entry} → <strong>Fechamento:</strong> ${t.close}</div>
-      <div class="stat"><strong>Suporte:</strong> ${t.support || "—"}</div>
-    </div>
-  </div>`;
-}
-
-function render() {
-  const otherTrades = trades.filter(t => ["10s","30s","1min","2min"].includes(t.expiry));
-  const standardTrades = trades.filter(t => !["10s","30s","1min","2min"].includes(t.expiry));
-  document.getElementById('grid5s').innerHTML = standardTrades.map(renderCard).join('');
-  document.getElementById('gridOther').innerHTML = otherTrades.map(renderCard).join('');
-
-  // Stats by pair
-  const pairCount = {};
-  trades.forEach(t => { pairCount[t.pair] = (pairCount[t.pair] || 0) + 1; });
-  const pairStats = Object.entries(pairCount).sort((a,b) => b[1]-a[1]);
-  const maxCount = Math.max(...pairStats.map(p=>p[1]));
-  document.getElementById('gridStats').innerHTML = pairStats.map(([pair,count]) => {
-    const pct = (count/maxCount*100).toFixed(0);
-    const pairTrades = trades.filter(t=>t.pair===pair);
-    const totalProfit = pairTrades.reduce((s,t) => s + (t.profit||0), 0);
-    return `<div class="trade-card" style="text-align:center;padding:20px">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:800;color:var(--cyan)">${pair}</div>
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin:4px 0">${count} trade${count>1?'s':''}</div>
-      <div style="height:8px;background:var(--bg2);border-radius:4px;margin:8px auto;overflow:hidden;max-width:200px">
-        <div style="height:100%;width:${pct}%;background:var(--green);border-radius:4px"></div>
+      <div class="nav">
+        <span class="counter">${idx+1}/${filtered.length}</span>
+        <button onclick="prev()">◀</button>
+        <button onclick="next()">▶</button>
       </div>
-      <div style="font-size:11px;color:var(--text3)">Total lucro: <span style="color:var(--green);font-weight:700">${totalProfit.toFixed(2)}</span></div>
-    </div>`;
-  }).join('');
-}
+    </div>
 
-render();
+    <div class="result-banner">
+      <div class="icon">${t.dir==="PUT"?"▼":"▲"}</div>
+      <div class="info">
+        <div class="val">+${t.cur}${t.profit.toFixed(2)}</div>
+        <div class="sub">${t.pattern} · ${t.pair}</div>
+      </div>
+      <div class="tags">
+        <span class="tg ${expClass}">⏱ ${t.exp}</span>
+        <span class="tg ${dirClass}">${t.dir}</span>
+        <span class="tg tgpct">${t.pct}%</span>
+      </div>
+    </div>
 
-// Filter
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    this.classList.add('active');
-    const filter = this.dataset.filter;
-    document.querySelectorAll('.trade-card').forEach(card => {
-      if (filter === 'all') {
-        card.style.display = '';
-      } else {
-        card.style.display = card.dataset.pair === filter ? '' : 'none';
-      }
-    });
+    <div class="chart-area" id="chart">
+      <canvas id="cv"></canvas>
+    </div>
+
+    <div class="bottom-info">
+      <div class="bi"><span class="k">Entrada</span><span class="v g">${t.entry}</span></div>
+      <div class="bi"><span class="k">Fechamento</span><span class="v">${t.close}</span></div>
+      <div class="bi"><span class="k">Horário Gráfico</span><span class="v b">${t.time}</span></div>
+      <div class="bi"><span class="k">iPhone</span><span class="v gold">${t.iphone}</span></div>
+      <div class="bi"><span class="k">${t.sup?"Suporte":"Resistência"}</span><span class="v b">${t.sup||t.res||"—"}</span></div>
+      <div class="bi"><span class="k">Imagens</span><span class="v">img ${t.img}</span></div>
+    </div>
+
+    <div class="swipe-hint">← Deslize para navegar →</div>
+  </div>`;
+
+  document.getElementById('app').innerHTML = html;
+  drawChart(t);
+
+  // Touch swipe
+  let startX = 0;
+  document.querySelector('.screen').addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  document.querySelector('.screen').addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx) > 60) dx > 0 ? prev() : next();
   });
-});
+  document.querySelector('.screen').addEventListener('wheel', e => {
+    if(Math.abs(e.deltaX) > 30) e.deltaX > 0 ? next() : prev();
+  });
+  // Keyboard
+  document.onkeydown = e => { if(e.key==='ArrowRight') next(); if(e.key==='ArrowLeft') prev(); };
+}
+
+function drawChart(t) {
+  const canvas = document.getElementById('cv');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+
+  const padL = 8, padR = 48, padT = 20, padB = 28;
+  const cw = W - padL - padR;
+  const ch = H - padT - padB;
+
+  // Background
+  ctx.fillStyle = '#0f1217';
+  ctx.fillRect(0, 0, W, H);
+
+  // Grid lines
+  const gridLines = 5;
+  ctx.strokeStyle = 'rgba(255,255,255,.04)';
+  ctx.lineWidth = 0.5;
+  for(let i=0;i<=gridLines;i++){
+    const y = padT + (ch/gridLines)*i;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
+  }
+  // Vertical grid
+  for(let i=1;i<8;i++){
+    const x = padL + (cw/8)*i;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, H-padB); ctx.stroke();
+  }
+
+  // Price labels (right side)
+  ctx.fillStyle = '#4d5665';
+  ctx.font = '9px JetBrains Mono, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  for(let i=0;i<5;i++){
+    const y = padT + (ch/4)*i;
+    ctx.fillText(t.prices[i].toFixed(t.prices[i]<1?5:t.prices[i]>10?3:t.prices[i]>1?4:5), W-6, y);
+  }
+
+  // Time labels (bottom)
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = '#4d5665';
+  for(let i=0;i<5;i++){
+    const x = padL + (cw/4)*i;
+    ctx.fillText(t.times[i], x, H-padB+6);
+  }
+
+  // Support/resistance line
+  if(t.sup || t.res){
+    const level = t.sup || t.res;
+    const priceRange = t.prices[0] - t.prices[4];
+    const yRatio = (t.prices[0] - level) / priceRange;
+    const sy = padT + ch * yRatio;
+    ctx.strokeStyle = t.sup ? 'rgba(59,130,246,.5)' : 'rgba(249,115,22,.5)';
+    ctx.setLineDash([6,4]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(padL, sy); ctx.lineTo(W-padR, sy); ctx.stroke();
+    ctx.setLineDash([]);
+    // Label
+    ctx.fillStyle = t.sup ? 'rgba(59,130,246,.8)' : 'rgba(249,115,22,.8)';
+    ctx.font = '8px JetBrains Mono, monospace';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    const label = t.sup ? 'Suporte ' : 'Resistência ';
+    ctx.fillText(label + level, padL+4, sy-2);
+  }
+
+  // Entry line
+  const entryIdx = t.prices.findIndex(p => {
+    if(t.entry >= 1) return Math.abs(p - t.entry) < 0.05;
+    return Math.abs(p - t.entry) < 0.0005;
+  });
+  const priceRange = t.prices[0] - t.prices[4];
+  const entryRatio = (t.prices[0] - t.entry) / priceRange;
+  const ey = padT + ch * Math.max(0, Math.min(1, entryRatio));
+
+  ctx.strokeStyle = t.dir === 'PUT' ? 'rgba(239,68,68,.7)' : 'rgba(34,197,94,.7)';
+  ctx.setLineDash([8,4]);
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(padL, ey); ctx.lineTo(W-padR, ey); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Entry label on right
+  ctx.fillStyle = t.dir === 'PUT' ? '#ef4444' : '#22c55e';
+  ctx.font = 'bold 9px JetBrains Mono, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('ENTRADA ' + t.entry, W-6, ey-2);
+  // Arrow indicator
+  ctx.fillStyle = t.dir === 'PUT' ? '#ef4444' : '#22c55e';
+  ctx.font = '14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(t.dir==='PUT'?'▼':'▲', W-38, ey + (t.dir==='PUT'?14:-2));
+
+  // Draw candles
+  const candles = t.candles;
+  const nC = candles.length;
+  const candleW = Math.min((cw-10)/nC - 1, 18);
+  const gap = (cw-10 - candleW*nC) / (nC-1) + candleW;
+
+  for(let i=0;i<nC;i++){
+    const c = candles[i];
+    const isBull = c.c >= c.o;
+    const oP = (t.prices[0] - c.o/100*t.prices[0]) / priceRange * ch;
+    const cP = (t.prices[0] - c.c/100*t.prices[0]) / priceRange * ch;
+    const hP = (t.prices[0] - c.h/100*t.prices[0]) / priceRange * ch;
+    const lP = (t.prices[0] - c.l/100*t.prices[0]) / priceRange * ch;
+
+    const x = padL + 5 + i * gap;
+    const bodyTop = Math.min(oP, cP);
+    const bodyH = Math.max(Math.abs(cP - oP), 2);
+    const y = padT + bodyTop;
+
+    // Wick
+    ctx.strokeStyle = isBull ? '#22c55e' : '#ef4444';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(x + candleW/2, padT + hP);
+    ctx.lineTo(x + candleW/2, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x + candleW/2, padT + lP);
+    ctx.lineTo(x + candleW/2, y + bodyH);
+    ctx.stroke();
+
+    // Body
+    ctx.fillStyle = isBull ? '#22c55e' : '#ef4444';
+    const alpha = isBull ? 0.85 : 0.75;
+    ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    const r = 2;
+    const bx = x, by = y, bw = candleW, bh = bodyH;
+    ctx.roundRect(bx, by, bw, bh, r);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Glow
+    if(isBull){
+      ctx.shadowColor = 'rgba(34,197,94,.3)';
+      ctx.shadowBlur = 6;
+    }
+  }
+
+  // Annotations
+  if(t.ann){
+    for(const a of t.ann){
+      const ax = padL + 5 + a.x * cw;
+      const ay = padT + a.y * ch;
+      const colors = {green:'rgba(34,197,94,.15)',red:'rgba(239,68,68,.15)',blue:'rgba(59,130,246,.15)',gold:'rgba(234,179,8,.15)',orange:'rgba(249,115,22,.15)',purple:'rgba(168,85,247,.15)',cyan:'rgba(6,182,212,.15)'};
+      const borders = {green:'rgba(34,197,94,.3)',red:'rgba(239,68,68,.3)',blue:'rgba(59,130,246,.3)',gold:'rgba(234,179,8,.3)',orange:'rgba(249,115,22,.3)',purple:'rgba(168,85,247,.3)',cyan:'rgba(6,182,212,.3)'};
+      const texts = {green:'#22c55e',red:'#ef4444',blue:'#3b82f6',gold:'#f59e0b',orange:'#f97316',purple:'#a855f7',cyan:'#06b6d4'};
+      ctx.fillStyle = colors[a.c] || colors.green;
+      ctx.strokeStyle = borders[a.c] || borders.green;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      const tw = ctx.measureText(a.t).width + 16;
+      ctx.roundRect(ax - tw/2, ay - 9, tw, 18, 5);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = texts[a.c] || '#22c55e';
+      ctx.font = 'bold 9px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(a.t, ax, ay+1);
+    }
+  }
+
+  // Watermark
+  ctx.fillStyle = 'rgba(255,255,255,.015)';
+  ctx.font = 'bold 32px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(t.pair.split(' ')[0], W/2, H/2);
+}
+
+function prev(){ if(currentIdx>0) render(currentIdx-1); }
+function next(){ if(currentIdx<filtered.length-1) render(currentIdx+1); }
+
+// ====== INIT ======
+render(0);
 </script>
 </body>
 </html>
