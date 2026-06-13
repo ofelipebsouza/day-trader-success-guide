@@ -1,16 +1,5 @@
 {
-  "name": "day-trader-success-guide",
-  "version": 2,
-  "builds": [
-    {
-      "src": "day-trader-success-guide.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/day-trader-success-guide.html"
-    }
-  ]
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "framework": null
 }
