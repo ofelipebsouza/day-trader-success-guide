@@ -295,7 +295,7 @@ function drawChart(t) {
     if(t.entry >= 1) return Math.abs(p - t.entry) < 0.05;
     return Math.abs(p - t.entry) < 0.0005;
   });
-  const priceRange = t.prices[0] - t.prices[4];
+  let priceRange = t.prices[0] - t.prices[4];
   const entryRatio = (t.prices[0] - t.entry) / priceRange;
   const ey = padT + ch * Math.max(0, Math.min(1, entryRatio));
 
@@ -324,7 +324,7 @@ function drawChart(t) {
   const gap = (cw-10 - candleW*nC) / (nC-1) + candleW;
   const priceMax = Math.max(...t.candles.map(c=>c.h), t.prices[0]);
   const priceMin = Math.min(...t.candles.map(c=>c.l), t.prices[4]);
-  const priceRange = Math.max(priceMax - priceMin, 0.0001);
+  priceRange = Math.max(priceMax - priceMin, 0.0001);
 
   function priceToY(p) { return padT + (priceMax - p) / priceRange * ch; }
 
